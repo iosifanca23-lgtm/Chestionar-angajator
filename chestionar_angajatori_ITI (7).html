@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chestionar Angajatori - ITI Valea Jiului</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700&display=swap');
+:root{--navy:#1a2744;--nlt:#253360;--gold:#e8a124;--mist:#f0f4f8;--wh:#fff;--bdr:#d1dce8;--ok:#2d7d52;--tx:#1e2d3d;--mu:#5a6e82;--c62:#2563eb;--c43:#d97706;--c47:#059669;--r:10px;--sh:0 4px 24px rgba(26,39,68,.10);}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:Inter,sans-serif;background:var(--mist);color:var(--tx);min-height:100vh;}
+.hdr{background:var(--navy);}
+.hi{max-width:960px;margin:0 auto;padding:26px 24px 20px;display:flex;flex-direction:column;gap:5px;}
+.hey{font-size:11px;font-weight:600;letter-spacing:1.8px;text-transform:uppercase;color:var(--gold);}
+.htit{font-family:Sora,sans-serif;font-size:21px;font-weight:700;color:#fff;line-height:1.3;}
+.hsub{font-size:13px;color:rgba(255,255,255,.6);}
+.hbar{display:flex;gap:10px;margin-top:14px;}
+.nb{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.8);font-family:Inter,sans-serif;font-size:12px;font-weight:500;padding:7px 16px;border-radius:6px;cursor:pointer;transition:all .18s;}
+.nb:hover,.nb.on{background:var(--gold);border-color:var(--gold);color:var(--navy);}
+.main{max-width:960px;margin:0 auto;padding:30px 24px 60px;}
+.ip{background:var(--wh);border-radius:var(--r);box-shadow:var(--sh);padding:30px 34px;margin-bottom:22px;}
+.ip p{font-size:14px;line-height:1.75;color:var(--mu);margin-bottom:10px;}
+.chk{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:6px 20px;margin:12px 0 0;}
+.chk li{font-size:13.5px;color:var(--tx);display:flex;gap:8px;align-items:flex-start;}
+.chk li::before{content:"–";color:var(--navy);font-weight:400;flex-shrink:0;margin-top:1px;}
+.card{background:var(--wh);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:18px;overflow:hidden;}
+.ch{background:var(--navy);padding:15px 24px;font-family:Sora,sans-serif;font-size:14px;font-weight:600;color:var(--gold);}
+.cb{padding:26px;}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+.fr.s{grid-template-columns:1fr;}
+.fr.t{grid-template-columns:1fr 1fr 1fr;}
+.fl label{display:block;font-size:11px;font-weight:700;color:var(--mu);margin-bottom:4px;text-transform:uppercase;letter-spacing:.7px;}
+.fl input{width:100%;border:1.5px solid var(--bdr);border-radius:7px;padding:9px 12px;font-family:Inter,sans-serif;font-size:14px;color:var(--tx);background:var(--wh);outline:none;transition:border-color .15s;}
+.fl input:focus{border-color:var(--nlt);}
+.cbtns{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+.cbtn{background:var(--wh);border:2px solid var(--bdr);border-radius:var(--r);padding:17px 13px;cursor:pointer;text-align:left;transition:all .2s;display:flex;flex-direction:column;gap:4px;}
+.cbtn:hover{border-color:var(--nlt);transform:translateY(-2px);}
+.cbtn.s62{border-color:var(--c62);background:#eff6ff;}
+.cbtn.s43{border-color:var(--c43);background:#fffbeb;}
+.cbtn.s47{border-color:var(--c47);background:#ecfdf5;}
+.ccode{font-family:Sora,sans-serif;font-size:22px;font-weight:700;line-height:1;}
+.cc62{color:var(--c62);}.cc43{color:var(--c43);}.cc47{color:var(--c47);}
+.cname{font-size:12.5px;font-weight:500;color:var(--tx);line-height:1.4;}
+.ctag{font-size:11px;color:var(--mu);}
+.rg{display:flex;flex-direction:column;gap:8px;}
+.ro{display:flex;align-items:center;gap:10px;padding:9px 13px;border:1.5px solid var(--bdr);border-radius:7px;cursor:pointer;font-size:14px;transition:all .15s;}
+.ro:hover{background:var(--mist);}
+.ro input{accent-color:var(--navy);cursor:pointer;}
+.ro.on{border-color:var(--nlt);background:#f0f4ff;}
+.q{margin-bottom:26px;}
+.ql{font-size:15px;font-weight:600;color:var(--tx);margin-bottom:12px;line-height:1.5;}
+.qn{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;background:var(--navy);color:#fff;border-radius:50%;font-size:11px;font-weight:700;margin-right:7px;vertical-align:middle;}
+.dt{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:7px;}
+.dt th{background:var(--navy);color:#fff;padding:9px 13px;text-align:left;font-weight:600;font-size:12px;}
+.dt td{padding:9px 13px;border-bottom:1px solid var(--bdr);vertical-align:top;line-height:1.45;}
+.dt tr:last-child td{border-bottom:none;}
+.dt tr:nth-child(even) td{background:var(--mist);}
+.dt input[type=number]{width:78px;border:1.5px solid var(--bdr);border-radius:6px;padding:6px 8px;font-size:13px;text-align:center;outline:none;}
+.dt input[type=text]{width:100%;border:1.5px solid var(--bdr);border-radius:6px;padding:6px 8px;font-size:13px;outline:none;}
+.bc{font-weight:600;}
+.cblk{border:1.5px solid var(--bdr);border-radius:8px;margin-bottom:9px;overflow:hidden;}
+.chdr{background:var(--mist);padding:11px 15px;font-size:13.5px;font-weight:600;color:var(--navy);cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px;user-select:none;}
+.chdr:hover{background:#e4ecf5;}
+.cbdy{padding:14px 15px;display:none;}
+.cbdy.op{display:block;}
+.cnote{font-size:12.5px;color:var(--mu);margin-bottom:11px;padding:8px 12px;background:#f8f9ff;border-left:3px solid var(--nlt);border-radius:4px;}
+.cnote strong{color:var(--navy);}
+.cctr{font-size:11px;padding:3px 9px;border-radius:11px;background:#e5e7eb;color:var(--mu);font-weight:700;flex-shrink:0;}
+.cctr.ok{background:#d1fae5;color:#065f46;}
+.cctr.err{background:#fee2e2;color:#991b1b;}
+.ccl{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+.ci{display:flex;align-items:flex-start;gap:9px;padding:9px 11px;border:1.5px solid var(--bdr);border-radius:7px;cursor:pointer;font-size:13px;line-height:1.5;transition:all .15s;}
+.ci:hover{background:var(--mist);}
+.ci.k62{border-color:var(--c62);background:#eff6ff;}
+.ci.k43{border-color:var(--c43);background:#fffbeb;}
+.ci.k47{border-color:var(--c47);background:#ecfdf5;}
+.ci input{accent-color:var(--navy);cursor:pointer;flex-shrink:0;margin-top:3px;}
+.ss{background:var(--wh);border-radius:var(--r);box-shadow:var(--sh);padding:26px;margin-top:22px;display:flex;flex-direction:column;gap:13px;}
+.dt2{font-size:13.5px;color:var(--mu);font-style:italic;}
+.fsgn{display:flex;gap:18px;align-items:flex-end;}
+.fsgn .fl{flex:1;}
+.bsub{background:var(--navy);color:#fff;border:none;border-radius:8px;padding:13px 32px;font-family:Sora,sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:background .18s,transform .12s;white-space:nowrap;}
+.bsub:hover{background:var(--nlt);transform:translateY(-1px);}
+.sok{display:none;background:var(--ok);color:white;border-radius:var(--r);padding:18px 26px;font-size:15px;font-weight:500;text-align:center;}
+.serr{display:none;background:#fee2e2;color:#991b1b;border-radius:8px;padding:13px 18px;font-size:14px;font-weight:500;}
+.sv{display:none;}
+.pwg{background:var(--wh);border-radius:var(--r);box-shadow:var(--sh);padding:56px 38px;text-align:center;max-width:420px;margin:56px auto;}
+.pwg h2{font-family:Sora,sans-serif;font-size:20px;color:var(--navy);margin-bottom:8px;}
+.pwg p{font-size:13.5px;color:var(--mu);margin-bottom:22px;}
+.pwg input{width:100%;border:2px solid var(--bdr);border-radius:8px;padding:11px 14px;font-size:16px;text-align:center;letter-spacing:3px;outline:none;}
+.pwg input:focus{border-color:var(--navy);}
+.bul{margin-top:13px;width:100%;background:var(--navy);color:#fff;border:none;border-radius:8px;padding:13px;font-family:Sora,sans-serif;font-size:15px;font-weight:600;cursor:pointer;}
+.bul:hover{background:var(--nlt);}
+.pwe{color:#ef4444;font-size:13px;margin-top:9px;}
+.stp{display:none;}
+.sth{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px;}
+.sttl{font-family:Sora,sans-serif;font-size:18px;font-weight:700;color:var(--navy);}
+.sg{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-bottom:18px;}
+.sc{background:var(--wh);border-radius:var(--r);box-shadow:var(--sh);padding:18px;text-align:center;}
+.sb{font-family:Sora,sans-serif;font-size:34px;font-weight:700;color:var(--navy);line-height:1;}
+.sl{font-size:11px;color:var(--mu);margin-top:3px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;}
+.cg{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px;}
+.cc{background:var(--wh);border-radius:var(--r);box-shadow:var(--sh);padding:20px;}
+.cc.full{grid-column:1/-1;}
+.cct{font-size:12px;font-weight:700;color:var(--navy);margin-bottom:16px;text-transform:uppercase;letter-spacing:.5px;}
+canvas{max-height:270px;}
+.rt{width:100%;border-collapse:collapse;font-size:12.5px;}
+.rt th{background:var(--navy);color:white;padding:8px 11px;text-align:left;font-size:12px;}
+.rt td{padding:8px 11px;border-bottom:1px solid var(--bdr);vertical-align:top;}
+.rt tr:hover td{background:var(--mist);}
+.bdg{display:inline-block;padding:2px 7px;border-radius:4px;font-size:11px;font-weight:700;}
+.b62{background:#dbeafe;color:var(--c62);}.b43{background:#fef3c7;color:#92400e;}.b47{background:#d1fae5;color:#065f46;}
+.ba{border:none;border-radius:7px;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer;}
+.brd{background:#fee2e2;color:#991b1b;}.brd:hover{background:#fecaca;}
+.bgn{background:var(--ok);color:white;margin-left:8px;}.bgn:hover{background:#236b44;}
+.bbl{background:var(--c62);color:white;margin-left:8px;}.bbl:hover{background:#1d4ed8;}
+.ld{display:none;position:fixed;inset:0;background:rgba(26,39,68,.5);z-index:999;align-items:center;justify-content:center;}
+.ld.on{display:flex;}
+.ldb{background:white;border-radius:12px;padding:26px 38px;text-align:center;font-size:14px;color:var(--navy);font-weight:600;}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#22c55e;margin-right:6px;animation:p 2s infinite;}
+@keyframes p{0%,100%{opacity:1;}50%{opacity:.4;}}
+@media(max-width:640px){.cbtns,.fr,.chk,.cg,.sg{grid-template-columns:1fr;}.ccl{grid-template-columns:1fr;}.fsgn{flex-direction:column;}.htit{font-size:18px;}}
+</style>
+</head>
+<body>
+<div class="ld" id="ldr"><div class="ldb">Se proceseaza...</div></div>
+<header class="hdr">
+  <div class="hi">
+    <span class="hey">Proiect PEO 2021-2027 - SMIS 331082 - ITI Valea Jiului</span>
+    <h1 class="htit">Chestionar pentru Angajatori</h1>
+    <p class="hsub">Studiu privind necesarul de forta de munca si nevoile de formare profesionala</p>
+    <div class="hbar">
+      <button class="nb on" id="nb1" onclick="gv(0)">&#128203; Completare chestionar</button>
+      <button class="nb" id="nb2" onclick="gv(1)">&#128202; Statistici si Grafice</button>
+    </div>
+  </div>
+</header>
+<div class="main">
+<div id="v0">
+  <div class="ip">
+    <p>Acest studiu este realizat in cadrul procesului de identificare a nevoilor de ocupare si formare profesionala la nivelul angajatorilor din teritoriul ITI Valea Jiului.</p>
+    <p><strong>Scopul cercetarii este identificarea:</strong></p>
+    <ul class="chk">
+      <li>locurilor de munca vacante existente</li><li>ocupatiilor pentru care exista deficit de personal</li>
+      <li>competentelor solicitate de angajatori</li><li>disponibilitatii angajatorilor de a recruta absolventi de formare</li>
+      <li>programelor de formare necesare pentru acoperirea deficitului</li>
+    </ul>
+    <p style="margin-top:12px;">Informatiile vor fi utilizate exclusiv in scop statistic si pentru elaborarea analizei de nevoi aferente proiectului.</p>
+  </div>
+  <div class="card">
+    <div class="ch">Date de identificare agent economic</div>
+    <div class="cb">
+      <div class="fr s"><div class="fl"><label>Agent economic</label><input type="text" id="fa" placeholder="Denumirea firmei"></div></div>
+      <div class="fr t">
+        <div class="fl"><label>CUI</label><input type="text" id="fc" placeholder="ex: RO12345678"></div>
+        <div class="fl"><label>CAEN principal/secundar</label><input type="text" id="fca" placeholder="ex: 6201"></div>
+        <div class="fl"><label>Domeniu de activitate</label><input type="text" id="fd" placeholder="ex: Productie software"></div>
+      </div>
+      <div class="fr t">
+        <div class="fl"><label>Adresa</label><input type="text" id="fad" placeholder="Strada, numar"></div>
+        <div class="fl"><label>Localitate</label><input type="text" id="flo" placeholder="ex: Petrosani"></div>
+        <div class="fl"><label>Judet</label><input type="text" id="fj" placeholder="ex: Hunedoara"></div>
+      </div>
+      <div class="fr">
+        <div class="fl"><label>Telefon</label><input type="text" id="ft" placeholder="ex: 0744 000 000"></div>
+        <div class="fl"><label>E-mail</label><input type="text" id="fe" placeholder="contact@firma.ro"></div>
+      </div>
+      <div class="fr">
+        <div class="fl"><label>Nr. salariati in prezent</label><input type="number" id="fs" placeholder="0" min="0"></div>
+        <div class="fl"><label>Media angajati 2025 (bilant)</label><input type="number" id="fm" placeholder="0" min="0"></div>
+      </div>
+      <div class="fr s"><div class="fl"><label>Reprezentant - Nume, Prenume</label><input type="text" id="frp" placeholder="ex: Ionescu Maria"></div></div>
+      <div class="fl" style="margin-top:4px;">
+        <label>Nivelul de decizie al respondentului</label>
+        <div class="rg" style="margin-top:6px;">
+          <label class="ro"><input type="radio" name="niv" value="Manager / Director / Administrator / Presedinte"> Manager / Director / Administrator / Presedinte</label>
+          <label class="ro"><input type="radio" name="niv" value="Manager de departament / de proiect / de linie"> Manager de departament / Manager de proiect / Manager de linie</label>
+          <label class="ro"><input type="radio" name="niv" value="Alta"> Alta functie de management: <input type="text" id="fna" placeholder="specificati..." style="margin-left:8px;width:180px;border:1px solid var(--bdr);border-radius:5px;padding:3px 8px;font-size:13px;"></label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ch">Selectati codul CAEN al firmei dumneavoastra</div>
+    <div class="cb">
+      <p style="font-size:13.5px;color:var(--mu);margin-bottom:16px;">Alegeti domeniul care corespunde activitatii principale a firmei pentru a accesa fisa de raspuns specifica.</p>
+      <div class="cbtns">
+        <button class="cbtn" id="btn62" onclick="selC('62')"><span class="ccode cc62">62</span><span class="cname">Servicii in tehnologia informatiei (IT)</span><span class="ctag">Software, baze de date, IT</span></button>
+        <button class="cbtn" id="btn43" onclick="selC('43')"><span class="ccode cc43">43</span><span class="cname">Lucrari speciale de constructii</span><span class="ctag">Instalatii, electricitate, constructii</span></button>
+        <button class="cbtn" id="btn47" onclick="selC('47')"><span class="ccode cc47">47</span><span class="cname">Comert cu amanuntul</span><span class="ctag">Retail, magazine, e-commerce</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FISA 62 -->
+  <div id="fisa62" style="display:none;">
+    <div class="card">
+      <div class="ch" style="background:#1e3a6e;color:#7dd3fc;">FISA DE RASPUNS - COD CAEN 62 - Servicii in tehnologia informatiei (IT)</div>
+      <div class="cb">
+        <div class="q"><div class="ql"><span class="qn">1</span>In prezent, cat de usor gasiti persoane cu pregatirea necesara pentru ocuparea posturilor din organizatia dumneavoastra?</div>
+          <div class="rg"><label class="ro"><input type="radio" name="q1_62" value="Foarte usor"> Foarte usor</label><label class="ro"><input type="radio" name="q1_62" value="Relativ usor"> Relativ usor</label><label class="ro"><input type="radio" name="q1_62" value="Relativ dificil"> Relativ dificil</label><label class="ro"><input type="radio" name="q1_62" value="Foarte dificil"> Foarte dificil</label></div></div>
+        <div class="q"><div class="ql"><span class="qn">2</span>Aveti in prezent posturi vacante pentru care desfasurati sau intentionati sa desfasurati recrutare?</div>
+          <div class="rg"><label class="ro"><input type="radio" name="q2_62" value="Da"> Da</label><label class="ro"><input type="radio" name="q2_62" value="Nu"> Nu</label></div></div>
+        <div class="q"><div class="ql"><span class="qn">3</span>Care este politica de personal a firmei pentru viitorul apropiat (urmatoarele 12 luni)?</div>
+          <div class="rg"><label class="ro"><input type="radio" name="q3_62" value="Intentionam angajari"> In viitorul apropiat intentionam sa facem angajari.</label><label class="ro"><input type="radio" name="q3_62" value="Nu intentionam angajari"> In viitorul apropiat nu intentionam sa facem angajari.</label></div></div>
+        <div class="q"><div class="ql"><span class="qn">4</span>Va rugam sa indicati numarul de locuri de munca necesar pentru satisfacerea nevoii de forta de munca.</div>
+          <table class="dt"><thead><tr><th>Ocupatia</th><th>Cod COR</th><th>Nr. posturi vacante</th></tr></thead><tbody>
+            <tr><td class="bc">Operator introducere, validare si prelucrare date</td><td>COR 413201</td><td><input type="number" min="0" id="62_p1" placeholder="0"></td></tr>
+            <tr><td class="bc">Administrator pagini web / Web Administrator</td><td>COR 351401</td><td><input type="number" min="0" id="62_p2" placeholder="0"></td></tr>
+            <tr><td class="bc">Administrator baze de date</td><td>COR 252101</td><td><input type="number" min="0" id="62_p3" placeholder="0"></td></tr>
+            <tr><td class="bc">Analist date (Data Analyst)</td><td>COR 251201</td><td><input type="number" min="0" id="62_p4" placeholder="0"></td></tr>
+            <tr><td><input type="text" id="62_p5n" placeholder="Alt post..."></td><td></td><td><input type="number" min="0" id="62_p5" placeholder="0"></td></tr>
+          </tbody></table></div>
+        <div class="q"><div class="ql"><span class="qn">5</span>Pentru fiecare ocupatie, bifati <strong>competentele profesionale necesare</strong> (recomandat: minimum 5 din 10 per ocupatie)</div>
+          <div class="cblk">
+  <div class="chdr" onclick="tgc(this)"><span>Operator introducere, validare si prelucrare date</span><span class="cctr err" id="cnt_62_0">0 / 10 bifate</span></div>
+  <div class="cbdy" id="cb_62_0">
+    <p class="cnote">Recomandat: bifati minimum 5 din cele 10 competente pentru aceasta ocupatie.</p>
+    <div class="ccl"><label class="ci" id="ci_62_0_0"><input type="checkbox" name="chk_62_0" value="0" onchange="uc('62',0,'k62')"> Culegerea si introducerea rapida a datelor in baze de date specifice</label><label class="ci" id="ci_62_0_1"><input type="checkbox" name="chk_62_0" value="1" onchange="uc('62',0,'k62')"> Validarea si verificarea acuratetatii datelor introduse prin comparare cu documentele primare</label><label class="ci" id="ci_62_0_2"><input type="checkbox" name="chk_62_0" value="2" onchange="uc('62',0,'k62')"> Corectarea erorilor de culegere, omitere sau duplicare identificate in fluxul de date</label><label class="ci" id="ci_62_0_3"><input type="checkbox" name="chk_62_0" value="3" onchange="uc('62',0,'k62')"> Arhivarea digitala si organizarea logica a documentelor electronice procesate</label><label class="ci" id="ci_62_0_4"><input type="checkbox" name="chk_62_0" value="4" onchange="uc('62',0,'k62')"> Transpunerea informatiilor din format fizic in format electronic (Excel, baze de date SQL)</label><label class="ci" id="ci_62_0_5"><input type="checkbox" name="chk_62_0" value="5" onchange="uc('62',0,'k62')"> Prelucrarea primara a datelor (sortari, filtrari, formule matematice sau logice simple)</label><label class="ci" id="ci_62_0_6"><input type="checkbox" name="chk_62_0" value="6" onchange="uc('62',0,'k62')"> Generarea de rapoarte periodice sintetice pe baza datelor introduse in sistem</label><label class="ci" id="ci_62_0_7"><input type="checkbox" name="chk_62_0" value="7" onchange="uc('62',0,'k62')"> Asigurarea confidentialitatii si securitatii informatiilor procesate conform normelor GDPR</label><label class="ci" id="ci_62_0_8"><input type="checkbox" name="chk_62_0" value="8" onchange="uc('62',0,'k62')"> Efectuarea de copii de siguranta (backup) periodice pentru bazele de date administrate</label><label class="ci" id="ci_62_0_9"><input type="checkbox" name="chk_62_0" value="9" onchange="uc('62',0,'k62')"> Colaborarea cu departamentele conexe pentru clarificarea neconcordantelor din documentele sursa</label></div>
+  </div>
+</div><div class="cblk">
+  <div class="chdr" onclick="tgc(this)"><span>Administrator pagini web / Web Administrator</span><span class="cctr err" id="cnt_62_1">0 / 10 bifate</span></div>
+  <div class="cbdy" id="cb_62_1">
+    <p class="cnote">Recomandat: bifati minimum 5 din cele 10 competente pentru aceasta ocupatie.</p>
+    <div class="ccl"><label class="ci" id="ci_62_1_0"><input type="checkbox" name="chk_62_1" value="0" onchange="uc('62',1,'k62')"> Instalarea, configurarea si actualizarea platformelor CMS (WordPress, Joomla, Drupal)</label><label class="ci" id="ci_62_1_1"><input type="checkbox" name="chk_62_1" value="1" onchange="uc('62',1,'k62')"> Utilizarea panourilor de control pentru gazduire web (cPanel, Plesk) si gestionarea serverelor FTP</label><label class="ci" id="ci_62_1_2"><input type="checkbox" name="chk_62_1" value="2" onchange="uc('62',1,'k62')"> Monitorizarea timpului de functionare a site-ului si rezolvarea rapida a erorilor de server</label><label class="ci" id="ci_62_1_3"><input type="checkbox" name="chk_62_1" value="3" onchange="uc('62',1,'k62')"> Configurarea, gestionarea si securizarea bazelor de date atasate site-ului si backup-urilor periodice</label><label class="ci" id="ci_62_1_4"><input type="checkbox" name="chk_62_1" value="4" onchange="uc('62',1,'k62')"> Implementarea protocoalelor de securitate cibernetica (certificate SSL, firewall, scanare malware)</label><label class="ci" id="ci_62_1_5"><input type="checkbox" name="chk_62_1" value="5" onchange="uc('62',1,'k62')"> Cunoasterea si aplicarea limbajelor HTML5 si CSS3 pentru modificari structurale si de design</label><label class="ci" id="ci_62_1_6"><input type="checkbox" name="chk_62_1" value="6" onchange="uc('62',1,'k62')"> Gestionarea conturilor de e-mail asociate domeniului web (creare adrese, configurare IMAP/POP3/SMTP)</label><label class="ci" id="ci_62_1_7"><input type="checkbox" name="chk_62_1" value="7" onchange="uc('62',1,'k62')"> Integrarea si monitorizarea instrumentelor de analiza a traficului web (Google Analytics, Search Console)</label><label class="ci" id="ci_62_1_8"><input type="checkbox" name="chk_62_1" value="8" onchange="uc('62',1,'k62')"> Optimizarea vitezei de incarcare a paginilor prin tehnici de compresie, cache si minificare</label><label class="ci" id="ci_62_1_9"><input type="checkbox" name="chk_62_1" value="9" onchange="uc('62',1,'k62')"> Verificarea compatibilitatii si optimizarea afisarii site-ului pe diferite browsere si dispozitive mobile</label></div>
+  </div>
+</div><div class="cblk">
+  <div class="chdr" onclick="tgc(this)"><span>Administrator baze de date</span><span class="cctr err" id="cnt_62_2">0 / 10 bifate</span></div>
+  <div class="cbdy" id="cb_62_2">
+    <p class="cnote">Recomandat: bifati minimum 5 din cele 10 competente pentru aceasta ocupatie.</p>
+    <div class="ccl"><label class="ci" id="ci_62_2_0"><input type="checkbox" name="chk_62_2" value="0" onchange="uc('62',2,'k62')"> Proiectarea arhitecturii logice si fizice a bazelor de date conform cerintelor tehnice</label><label class="ci" id="ci_62_2_1"><input type="checkbox" name="chk_62_2" value="1" onchange="uc('62',2,'k62')"> Scrierea, optimizarea si depanarea interogarilor complexe si a scripturilor SQL</label><label class="ci" id="ci_62_2_2"><input type="checkbox" name="chk_62_2" value="2" onchange="uc('62',2,'k62')"> Instalarea, configurarea si administrarea sistemelor RDBMS (MySQL, PostgreSQL, SQL Server, Oracle)</label><label class="ci" id="ci_62_2_3"><input type="checkbox" name="chk_62_2" value="3" onchange="uc('62',2,'k62')"> Implementarea politicilor de securitate, criptare a datelor si gestionarea drepturilor de acces</label><label class="ci" id="ci_62_2_4"><input type="checkbox" name="chk_62_2" value="4" onchange="uc('62',2,'k62')"> Elaborarea, testarea si executarea planurilor de recuperare in caz de dezastru (Disaster Recovery)</label><label class="ci" id="ci_62_2_5"><input type="checkbox" name="chk_62_2" value="5" onchange="uc('62',2,'k62')"> Monitorizarea performantei serverelor de baze de date si identificarea blocajelor (bottlenecks)</label><label class="ci" id="ci_62_2_6"><input type="checkbox" name="chk_62_2" value="6" onchange="uc('62',2,'k62')"> Efectuarea operatiunilor de migrare a datelor intre sisteme si asigurarea integritatii referentiale</label><label class="ci" id="ci_62_2_7"><input type="checkbox" name="chk_62_2" value="7" onchange="uc('62',2,'k62')"> Configurarea sistemelor de replicare si clusterizare pentru disponibilitate ridicata (High Availability)</label><label class="ci" id="ci_62_2_8"><input type="checkbox" name="chk_62_2" value="8" onchange="uc('62',2,'k62')"> Utilizarea tehnologiilor NoSQL (MongoDB, Redis) pentru gestionarea datelor nestructurate</label><label class="ci" id="ci_62_2_9"><input type="checkbox" name="chk_62_2" value="9" onchange="uc('62',2,'k62')"> Documentarea tehnica riguroasa a structurii bazei de date, schemelor si procedurilor stocate</label></div>
+  </div>
+</div><div class="cblk">
+  <div class="chdr" onclick="tgc(this)"><span>Analist date (Data Analyst)</span><span class="cctr err" id="cnt_62_3">0 / 10 bifate</span></div>
+  <div class="cbdy" id="cb_62_3">
+    <p class="cnote">Recomandat: bifati minimum 5 din cele 10 competente pentru aceasta ocupatie.</p>
+    <div class="ccl"><label class="ci" id="ci_62_3_0"><input type="checkbox" name="chk_62_3" value="0" onchange="uc('62',3,'k62')"> Extragerea volumelor mari de date din surse diverse (baze de date SQL, fisiere Excel/CSV, API-uri)</label><label class="ci" id="ci_62_3_1"><input type="checkbox" name="chk_62_3" value="1" onchange="uc('62',3,'k62')"> Curatarea, transformarea si prelucrarea seturilor de date brute (Data Cleaning)</label><label class="ci" id="ci_62_3_2"><input type="checkbox" name="chk_62_3" value="2" onchange="uc('62',3,'k62')"> Utilizarea limbajelor Python (Pandas, NumPy) sau R pentru manipularea datelor</label><label class="ci" id="ci_62_3_3"><input type="checkbox" name="chk_62_3" value="3" onchange="uc('62',3,'k62')"> Crearea de dashboard-uri interactive si rapoarte vizuale in instrumente Business Intelligence (Power BI, Tableau)</label><label class="ci" id="ci_62_3_4"><input type="checkbox" name="chk_62_3" value="4" onchange="uc('62',3,'k62')"> Aplicarea metodelor statistice (corelatii, medii, distributii, regresii) pentru identificarea tendintelor</label><label class="ci" id="ci_62_3_5"><input type="checkbox" name="chk_62_3" value="5" onchange="uc('62',3,'k62')"> Proiectarea proceselor de colectare automatizata a datelor pentru actualizarea KPI-urilor</label><label class="ci" id="ci_62_3_6"><input type="checkbox" name="chk_62_3" value="6" onchange="uc('62',3,'k62')"> Traducerea analizelor tehnice complexe in recomandari comerciale clare pentru management</label><label class="ci" id="ci_62_3_7"><input type="checkbox" name="chk_62_3" value="7" onchange="uc('62',3,'k62')"> Efectuarea analizelor comparative (A/B testing) si interpretarea comportamentului utilizatorilor</label><label class="ci" id="ci_62_3_8"><input type="checkbox" name="chk_62_3" value="8" onchange="uc('62',3,'k62')"> Colaborarea cu inginerii de date (Data Engineers) pentru optimizarea structurilor de date</label><label class="ci" id="ci_62_3_9"><input type="checkbox" name="chk_62_3" value="9" onchange="uc('62',3,'k62')"> Asigurarea conformitatii proceselor de analiza a datelor cu normele GDPR</label></div>
+  </div>
+</div>
+        </div>
+        <div class="q"><div class="ql"><span class="qn">6</span>Care programe de formare ar fi utile pentru acoperirea deficitului de personal?</div>
+          <table class="dt"><thead><tr><th>Nr.</th><th>Program de formare profesionala</th><th>Nr. posturi disponibile ce pot fi ocupate</th></tr></thead><tbody>
+            <tr><td>1</td><td>Operator introducere, validare si prelucrare date</td><td><input type="number" min="0" id="62_f1" placeholder="0"></td></tr>
+            <tr><td>2</td><td>Web Designer / Administrator site</td><td><input type="number" min="0" id="62_f2" placeholder="0"></td></tr>
+            <tr><td>3</td><td>Administrator Baze de Date</td><td><input type="number" min="0" id="62_f3" placeholder="0"></td></tr>
+            <tr><td>4</td><td>Data Analyst (Python / R / Power BI)</td><td><input type="number" min="0" id="62_f4" placeholder="0"></td></tr>
+            <tr><td>5</td><td><input type="text" id="62_f5n" placeholder="Altul. Care anume?"></td><td><input type="number" min="0" id="62_f5" placeholder="0"></td></tr>
+          </tbody></table></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FISA 43 -->
+  <div id="fisa43" style="display:none;">
+    <div class="card">
+      <div class="ch" style="background:#78350f;color:#fde68a;">FISA DE RASPUNS - COD CAEN 43 - Lucrari speciale de constructii</div>
+      <div class="cb">
+        <div class="q"><div class="ql"><span class="qn">1</span>In prezent, cat de usor gasiti persoane cu pregatirea necesara pentru ocuparea posturilor din organizatia dumneavoastra?</div>
+          <div class="rg"><label class="ro"><input type="radio" name="q1_43" value="Foarte usor"> Foarte usor</label><label class="ro"><input type="radio" name="q1_43" value="Relativ usor"> Relativ usor</label><label class="ro"><input type="radio" name="q1_43" value="Relativ dificil"> Relativ dificil</label><label class="ro"><input type="radio" name="q1_43" value="Foarte dificil"> Foarte dificil</label></div></div>
+        <div class="q"><div class="ql"><span class="qn">2</span>Aveti in prezent posturi vacante pentru care desfasurati sau intentionati sa desfasurati recrutare?</div>
+          <div class="rg"><label class="ro"><input type="radio" name="q2_43" value="Da"> Da</label><label class="ro"><input type="radio" name="q2_43" value="Nu"> Nu</label></div></div>
+        <div class="q"><div class="ql"><span class="qn">3</span>Care este politica de personal a firmei pentru viitorul apropiat (urmatoarele 12 luni)?</div>
+          <div class="rg"><label class="ro"><input type="radio" name="q3_43" value="Intentionam angajari"> In viitorul apropiat intentionam sa facem angajari.</label><label class="ro"><input type="radio" name="q3_43" value="Nu intentionam angajari"> In viitorul apropiat nu intentionam sa facem angajari.</label></div></div>
+        <div class="q"><div class="ql"><span class="qn">4</span>Va rugam sa indicati numarul de locuri de munca necesar pentru satisfacerea nevoii de forta de munca.</div>
+          <table class="dt"><thead><tr><th>Ocupatia</th><th>Cod COR</th><th>Nr. posturi vacante</th></tr></thead><tbody>
+            <tr><td class="bc">Instalator pentru pompe de caldura</td><td>COR 413201</td><td><input type="number" min="0" id="43_p1" placeholder="0"></td></tr>
+            <tr><td class="bc">Instalator pentru sisteme fotovoltaice solare</td><td>COR 741103</td><td><input type="number" min="0" id="43_p2" placeholder="0"></td></tr>
+            <tr><td class="bc">Electrician constructor</td><td>COR 741101</td><td><input type="number" min="0" id="43_p3" placeholder="0"></td></tr>
+            <tr><td class="bc">Instalator tehnico-sanitar si de gaze</td><td>COR 712609</td><td><input type="number" min="0" id="43_p4" placeholder="0"></td></tr>
+            <tr><td class="bc">Zugrav</td><td>COR 713102</td><td><input type="number" min="0" id="43_p5" placeholder="0"></td></tr>
+            <tr><td class="bc">Masinist la masini pentru terasamente</td><td>COR 834201</td><td><input type="number" min="0" id="43_p6" placeholder="0"></td></tr>
+            <tr><td><input type="text" id="43_p7n" placeholder="Alt post..."></td><td></td><td><input type="number" min="0" id="43_p7" placeholder="0"></td></tr>
+          </tbody></table></div>
+        <div class="q"><div class="ql"><span class="qn">5</span>Pentru fiecare ocupatie, bifati <strong>competentele profesionale necesare</strong> (recomandat: minimum 5 din 10 per ocupatie)</div>
+          <div class="cblk">
+  <div class="chdr" onclick="tgc(this)"><span>Instalator pentru pompe de caldura</span><span class="cctr err" id="cnt_43_0">0 / 10 bifate</span></div>
+  <div class="cbdy" id="cb_43_0">
+    <p class="cnote">Recomandat: bifati minimum 5 din cele 10 competente pentru aceasta ocupatie.</p>
+    <div class="ccl"><label class="ci" id="ci_43_0_0"><input type="checkbox" name="chk_43_0" value="0" onchange="uc('43',0,'k43')"> Dimensionarea preliminara si stabilirea locului optim de amplasare a unitatilor interne si externe</label><label class="ci" id="ci_43_0_1"><input type="checkbox" name="chk_43_0" value="1" onchange="uc('43',0,'k43')"> Montarea mecanica a pompelor de caldura (aer-aer, aer-apa, sol-apa) pe suporturi antivibratii</label><label class="ci" id="ci_43_0_2"><input type="checkbox" name="chk_43_0" value="2" onchange="uc('43',0,'k43')"> Executarea conexiunilor hidraulice intre pompa, puffer, boiler si instalatia interioara</label><label class="ci" id="ci_43_0_3"><input type="checkbox" name="chk_43_0" value="3" onchange="uc('43',0,'k43')"> Realizarea traseelor frigorifice din cupru (taiere, indoire, sudura, izolare termica)</label><label class="ci" id="ci_43_0_4"><input type="checkbox" name="chk_43_0" value="4" onchange="uc('43',0,'k43')"> Efectuarea testelor de etanseitate cu azot la presiune inalta a circuitului frigorific</label><label class="ci" id="ci_43_0_5"><input type="checkbox" name="chk_43_0" value="5" onchange="uc('43',0,'k43')"> Vidarea sistemului frigorific si incarcarea cu agent frigorific (R32, R290, R410A)</label><label class="ci" id="ci_43_0_6"><input type="checkbox" name="chk_43_0" value="6" onchange="uc('43',0,'k43')"> Legarea componentelor electrice, a senzorilor de temperatura si a termostatelor de ambient</label><label class="ci" id="ci_43_0_7"><input type="checkbox" name="chk_43_0" value="7" onchange="uc('43',0,'k43')"> Punerea in functiune, calibrarea parametrilor de lucru si setarea curbelor de incalzire</label><label class="ci" id="ci_43_0_8"><input type="checkbox" name="chk_43_0" value="8" onchange="uc('43',0,'k43')"> Diagnosticarea anomaliilor in functionare prin analiza presiunilor si temperaturilor de lucru</label><label class="ci" id="ci_43_0_9"><input type="checkbox" name="chk_43_0" value="9" onchange="uc('43',0,'k43')"> Efectuarea lucrarilor de mentenanta periodica (curatare filtre, verificare presiune, igienizare)</label></div>
+  </div>
+</div><div class="cblk">
+  <div class="chdr" onclick="tgc(this)"><span>Instalator pentru sisteme fotovoltaice solare</span><span class="cctr err" id="cnt_43_1">0 / 10 bifate</span></div>
+  <div class="cbdy" id="cb_43_1">
+    <p class="cnote">Recomandat: bifati minimum 5 din cele 10 competente pentru aceasta ocupatie.</p>
+    <div class="ccl"><label class="ci" id="ci_43_1_0"><input type="checkbox" name="chk_43_1" value="0" onchange="uc('43',1,'k43')"> Citirea si interpretarea schemelor electrice, a planurilor de amplasare si a proiectului tehnic</label><label class="ci" id="ci_43_1_1"><input type="checkbox" name="chk_43_1" value="1" onchange="uc('43',1,'k43')"> Montarea structurilor metalice de sustinere a panourilor pe diferite tipuri de acoperisuri sau la sol</label><label class="ci" id="ci_43_1_2"><input type="checkbox" name="chk_43_1" value="2" onchange="uc('43',1,'k43')"> Ancorarea si fixarea mecanica securizata a modulelor fotovoltaice pe structura de suport</label><label class="ci" id="ci_43_1_3"><input type="checkbox" name="chk_43_1" value="3" onchange="uc('43',1,'k43')"> Realizarea conexiunilor electrice in serie si paralel ale panourilor (cablare DC, sertizare mufe MC4)</label><label class="ci" id="ci_43_1_4"><input type="checkbox" name="chk_43_1" value="4" onchange="uc('43',1,'k43')"> Pozitionarea, fixarea si conectarea invertorului, a controllerului de incarcare si a bateriilor</label><label class="ci" id="ci_43_1_5"><input type="checkbox" name="chk_43_1" value="5" onchange="uc('43',1,'k43')"> Montarea tablourilor electrice de protectie (sigurante fuzibile DC/AC, descarcatoare de supratensiune)</label><label class="ci" id="ci_43_1_6"><input type="checkbox" name="chk_43_1" value="6" onchange="uc('43',1,'k43')"> Realizarea legaturilor de impamanare a structurii metalice si a panourilor fotovoltaice</label><label class="ci" id="ci_43_1_7"><input type="checkbox" name="chk_43_1" value="7" onchange="uc('43',1,'k43')"> Masurarea parametrilor electrici de functionare (tensiune Voc, curent de scurtcircuit Isc)</label><label class="ci" id="ci_43_1_8"><input type="checkbox" name="chk_43_1" value="8" onchange="uc('43',1,'k43')"> Configurarea software a invertorului, setarea parametrilor de retea si monitorizarea Wi-Fi</label><label class="ci" id="ci_43_1_9"><input type="checkbox" name="chk_43_1" value="9" onchange="uc('43',1,'k43')"> Depanarea sistemelor fotovoltaice (identificare panouri defecte, cabluri intrerupte, erori invertor)</label></div>
+  </div>
+</div><div class="cblk">
+  <div class="chdr" onclick="tgc(this)"><span>Electrician constructor</span><span class="cctr err" id="cnt_43_2">0 / 10 bifate</span></div>
+  <div class="cbdy" id="cb_43_2">
+    <p class="cnote">Recomandat: bifati minimum 5 din cele 10 competente pentru aceasta ocupatie.</p>
+    <div class="ccl"><label class="ci" id="ci_43_2_0"><input type="checkbox" name="chk_43_2" value="0" onchange="uc('43',2,'k43')"> Citirea diagramelor monofilare si interpretarea planurilor instalatiei electrice a cladirii</label><label class="ci" id="ci_43_2_1"><input type="checkbox" name="chk_43_2" value="1" onchange="uc('43',2,'k43')"> Montarea tuburilor de protectie (cofrag, PVC) si a dozelor de aparat/legatura in pereti sau tavane</label><label class="ci" id="ci_43_2_2"><input type="checkbox" name="chk_43_2" value="2" onchange="uc('43',2,'k43')"> Traficarea (tragerea) cablurilor electrice prin tuburile de protectie conform circuitelor proiectate</label><label class="ci" id="ci_43_2_3"><input type="checkbox" name="chk_43_2" value="3" onchange="uc('43',2,'k43')"> Montarea, echiparea si cablarea tablourilor electrice de distributie (disjunctoare, diferentiale, contactoare)</label><label class="ci" id="ci_43_2_4"><input type="checkbox" name="chk_43_2" value="4" onchange="uc('43',2,'k43')"> Instalarea aparatelor terminale (intrerupatoare, prize de curent, prize de date, senzori de miscare)</label><label class="ci" id="ci_43_2_5"><input type="checkbox" name="chk_43_2" value="5" onchange="uc('43',2,'k43')"> Montarea corpurilor de iluminat de interior si exterior, a sistemelor de iluminat de urgenta</label><label class="ci" id="ci_43_2_6"><input type="checkbox" name="chk_43_2" value="6" onchange="uc('43',2,'k43')"> Executarea si masurarea prizelor de pamant (impamanare) si instalarea sistemelor de paratrasnete</label><label class="ci" id="ci_43_2_7"><input type="checkbox" name="chk_43_2" value="7" onchange="uc('43',2,'k43')"> Verificarea continuitatii circuitelor si testarea izolatiei cablurilor inainte de punerea sub tensiune</label><label class="ci" id="ci_43_2_8"><input type="checkbox" name="chk_43_2" value="8" onchange="uc('43',2,'k43')"> Instalarea sistemelor de curenti slabi (interfoane, sisteme de alarma, cablare TV/Internet)</label><label class="ci" id="ci_43_2_9"><input type="checkbox" name="chk_43_2" value="9" onchange="uc('43',2,'k43')"> Remedierea defectiunilor electrice (scurtcircuite, suprasarcini, contacte imperfecte)</label></div>
+  </div>
+</div><div class="cblk">
+  <div class="chdr" onclick="tgc(this)"><span>Instalator tehnico-sanitar si de gaze</span><span class="cctr err" id="cnt_43_3">0 / 10 bifate</span></div>
+  <div class="cbdy" id="cb_43_3">
+    <p class="cnote">Recomandat: bifati minimum 5 din cele 10 competente pentru aceasta ocupatie.</p>
+    <div class="ccl"><label class="ci" id="ci_43_3_0"><input type="checkbox" name="chk_43_3" value="0" onchange="uc('43',3,'k43')"> Trasarea pe pozitie a traseelor pentru conductele de alimentare cu apa si evacuare menajera</label><label class="ci" id="ci_43_3_1"><input type="checkbox" name="chk_43_3" value="1" onchange="uc('43',3,'k43')"> Fasonarea, taierea si imbinarea tevilor din diverse materiale (PPR, PEX, cupru, PVC, fonta)</label><label class="ci" id="ci_43_3_2"><input type="checkbox" name="chk_43_3" value="2" onchange="uc('43',3,'k43')"> Montarea obiectelor sanitare (laveoare, vase WC, cazi de baie, cabine de dus, baterii mixatoare)</label><label class="ci" id="ci_43_3_3"><input type="checkbox" name="chk_43_3" value="3" onchange="uc('43',3,'k43')"> Instalarea sistemelor de incalzire clasice (radiatoare, robineti termostati, distribuitoare)</label><label class="ci" id="ci_43_3_4"><input type="checkbox" name="chk_43_3" value="4" onchange="uc('43',3,'k43')"> Montarea sistemelor moderne de incalzire in pardoseala (folie tacker, caroiaj, fixare tevi)</label><label class="ci" id="ci_43_3_5"><input type="checkbox" name="chk_43_3" value="5" onchange="uc('43',3,'k43')"> Instalarea centralelor termice pe gaz sau combustibil solid si a sistemelor de evacuare a gazelor arse</label><label class="ci" id="ci_43_3_6"><input type="checkbox" name="chk_43_3" value="6" onchange="uc('43',3,'k43')"> Realizarea probelor de etanseitate si presiune (hidraulice/pneumatice) pe circuitele montate</label><label class="ci" id="ci_43_3_7"><input type="checkbox" name="chk_43_3" value="7" onchange="uc('43',3,'k43')"> Montarea aparatelor de masura si control (apometre, regulatoare de presiune, filtre de apa)</label><label class="ci" id="ci_43_3_8"><input type="checkbox" name="chk_43_3" value="8" onchange="uc('43',3,'k43')"> Izolarea termica a conductelor de apa calda si rece pentru prevenirea pierderilor si a condensului</label><label class="ci" id="ci_43_3_9"><input type="checkbox" name="chk_43_3" value="9" onchange="uc('43',3,'k43')"> Identificarea si remedierea avariilor (scurgeri de apa, tevi infundate, inlocuiri de garnituri/robineti)</label></div>
+  </div>
+</div><div class="cblk">
+  <div class="chdr" onclick="tgc(this)"><span>Zugrav</span><span class="cctr err" id="cnt_43_4">0 / 10 bifate</span></div>
+  <div class="cbdy" id="cb_43_4">
+    <p class="cnote">Recomandat: bifati minimum 5 din cele 10 competente pentru aceasta ocupatie.</p>
+    <div class="ccl"><label class="ci" id="ci_43_4_0"><input type="checkbox" name="chk_43_4" value="0" onchange="uc('43',4,'k43')"> Pregatirea corecta a suprafetelor (decapare tapet, curatare vopsea veche, spalare, degresare)</label><label class="ci" id="ci_43_4_1"><input type="checkbox" name="chk_43_4" value="1" onchange="uc('43',4,'k43')"> Aplicarea gleturilor de incarcare si de finisaj pentru indreptarea peretilor si tavanelor</label><label class="ci" id="ci_43_4_2"><input type="checkbox" name="chk_43_4" value="2" onchange="uc('43',4,'k43')"> Efectuarea operatiunilor de slefuire si desprafuire mecanica sau manuala a suprafetelor</label><label class="ci" id="ci_43_4_3"><input type="checkbox" name="chk_43_4" value="3" onchange="uc('43',4,'k43')"> Aplicarea straturilor de amorsa potrivite tipului de suport (beton, gips-carton, tencuiala)</label><label class="ci" id="ci_43_4_4"><input type="checkbox" name="chk_43_4" value="4" onchange="uc('43',4,'k43')"> Prepararea si diluarea vopselelor lavabile, acrilice sau silicatice conform fiselor tehnice</label><label class="ci" id="ci_43_4_5"><input type="checkbox" name="chk_43_4" value="5" onchange="uc('43',4,'k43')"> Aplicarea vopselelor folosind trafaletul, pensula sau aparatele de pulverizare airless</label><label class="ci" id="ci_43_4_6"><input type="checkbox" name="chk_43_4" value="6" onchange="uc('43',4,'k43')"> Executarea lucrarilor decorative speciale (stucco veneziano, efecte metalice, texturate)</label><label class="ci" id="ci_43_4_7"><input type="checkbox" name="chk_43_4" value="7" onchange="uc('43',4,'k43')"> Montarea profilelor decorative din polistiren, poliuretan sau a tapetului</label><label class="ci" id="ci_43_4_8"><input type="checkbox" name="chk_43_4" value="8" onchange="uc('43',4,'k43')"> Protejarea suprafetelor adiacente din spatiul de lucru (banda de mascare, folii)</label><label class="ci" id="ci_43_4_9"><input type="checkbox" name="chk_43_4" value="9" onchange="uc('43',4,'k43')"> Calculul necesarului de materiale si al pierderilor pe baza releveului suprafetelor</label></div>
+  </div>
+</div><div class="cblk">
+  <div class="chdr" onclick="tgc(this)"><span>Masinist la masini pentru terasamente</span><span class="cctr err" id="cnt_43_5">0 / 10 bifate</span></div>
+  <div class="cbdy" id="cb_43_5">
+    <p class="cnote">Recomandat: bifati minimum 5 din cele 10 competente pentru aceasta ocupatie.</p>
+    <div class="ccl"><label class="ci" id="ci_43_5_0"><input type="checkbox" name="chk_43_5" value="0" onchange="uc('43',5,'k43')"> Operarea in conditii de siguranta a utilajelor de terasamente (excavatoare, buldozere, compactoare)</label><label class="ci" id="ci_43_5_1"><input type="checkbox" name="chk_43_5" value="1" onchange="uc('43',5,'k43')"> Executarea lucrarilor de sapatura, nivelare si compactare a terenului conform proiectului</label><label class="ci" id="ci_43_5_2"><input type="checkbox" name="chk_43_5" value="2" onchange="uc('43',5,'k43')"> Respectarea planurilor topografice si a cotelor de executie prescrise</label><label class="ci" id="ci_43_5_3"><input type="checkbox" name="chk_43_5" value="3" onchange="uc('43',5,'k43')"> Verificarea si efectuarea inspectiilor tehnice zilnice ale utilajului inainte de pornire</label><label class="ci" id="ci_43_5_4"><input type="checkbox" name="chk_43_5" value="4" onchange="uc('43',5,'k43')"> Remedierea defectiunilor minore si sesizarea prompta a celor majore serviciului de intretinere</label><label class="ci" id="ci_43_5_5"><input type="checkbox" name="chk_43_5" value="5" onchange="uc('43',5,'k43')"> Asigurarea securitatii la locul de munca si respectarea normelor PSI si de protectie a muncii</label><label class="ci" id="ci_43_5_6"><input type="checkbox" name="chk_43_5" value="6" onchange="uc('43',5,'k43')"> Executarea lucrarilor in conditii de siguranta in santuri, fundatii si zone cu risc de surpare</label><label class="ci" id="ci_43_5_7"><input type="checkbox" name="chk_43_5" value="7" onchange="uc('43',5,'k43')"> Curatarea si intretinerea curenta a utilajelor si echipamentelor din dotare</label><label class="ci" id="ci_43_5_8"><input type="checkbox" name="chk_43_5" value="8" onchange="uc('43',5,'k43')"> Colaborarea cu echipa de executie pentru respectarea graficului de lucrari si a calitatii</label><label class="ci" id="ci_43_5_9"><input type="checkbox" name="chk_43_5" value="9" onchange="uc('43',5,'k43')"> Completarea corecta a documentelor de lucru (foi de parcurs, fise de pontaj, registre utilaj)</label></div>
+  </div>
+</div>
+        </div>
+        <div class="q"><div class="ql"><span class="qn">6</span>Care programe de formare ar fi utile pentru acoperirea deficitului de personal?</div>
+          <table class="dt"><thead><tr><th>Nr.</th><th>Program de formare profesionala</th><th>Nr. posturi disponibile ce pot fi ocupate</th></tr></thead><tbody>
+            <tr><td>1</td><td>Instalator pentru pompe de caldura</td><td><input type="number" min="0" id="43_f1" placeholder="0"></td></tr>
+            <tr><td>2</td><td>Tehnician instalator sisteme de incalzire/climatizare</td><td><input type="number" min="0" id="43_f2" placeholder="0"></td></tr>
+            <tr><td>3</td><td>Instalator pentru sisteme fotovoltaice solare</td><td><input type="number" min="0" id="43_f3" placeholder="0"></td></tr>
+            <tr><td>4</td><td>Electrician exploatare joasa tensiune</td><td><input type="number" min="0" id="43_f4" placeholder="0"></td></tr>
+            <tr><td>5</td><td>Electrician constructor</td><td><input type="number" min="0" id="43_f5" placeholder="0"></td></tr>
+            <tr><td>6</td><td>Instalator instalatii tehnico-sanitare si de gaze</td><td><input type="number" min="0" id="43_f6" placeholder="0"></td></tr>
+            <tr><td>7</td><td>Zugrav</td><td><input type="number" min="0" id="43_f7" placeholder="0"></td></tr>
+            <tr><td>8</td><td>Masinist la masini pentru terasamente</td><td><input type="number" min="0" id="43_f8" placeholder="0"></td></tr>
+            <tr><td>9</td><td><input type="text" id="43_f9n" placeholder="Altul. Care anume?"></td><td><input type="number" min="0" id="43_f9" placeholder="0"></td></tr>
+          </tbody></table></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FISA 47 -->
+  <div id="fisa47" style="display:none;">
+    <div class="card">
+      <div class="ch" style="background:#064e3b;color:#6ee7b7;">FISA DE RASPUNS - COD CAEN 47 - Comert cu amanuntul</div>
+      <div class="cb">
+        <div class="q"><div class="ql"><span class="qn">1</span>In prezent, cat de usor gasiti persoane cu pregatirea necesara pentru ocuparea posturilor din organizatia dumneavoastra?</div>
+          <div class="rg"><label class="ro"><input type="radio" name="q1_47" value="Foarte usor"> Foarte usor</label><label class="ro"><input type="radio" name="q1_47" value="Relativ usor"> Relativ usor</label><label class="ro"><input type="radio" name="q1_47" value="Relativ dificil"> Relativ dificil</label><label class="ro"><input type="radio" name="q1_47" value="Foarte dificil"> Foarte dificil</label></div></div>
+        <div class="q"><div class="ql"><span class="qn">2</span>Aveti in prezent posturi vacante pentru care desfasurati sau intentionati sa desfasurati recrutare?</div>
+          <div class="rg"><label class="ro"><input type="radio" name="q2_47" value="Da"> Da</label><label class="ro"><input type="radio" name="q2_47" value="Nu"> Nu</label></div></div>
+        <div class="q"><div class="ql"><span class="qn">3</span>Care este politica de personal a firmei pentru viitorul apropiat (urmatoarele 12 luni)?</div>
+          <div class="rg"><label class="ro"><input type="radio" name="q3_47" value="Intentionam angajari"> In viitorul apropiat intentionam sa facem angajari.</label><label class="ro"><input type="radio" name="q3_47" value="Nu intentionam angajari"> In viitorul apropiat nu intentionam sa facem angajari.</label></div></div>
+        <div class="q"><div class="ql"><span class="qn">4</span>Va rugam sa indicati numarul de locuri de munca necesar pentru satisfacerea nevoii de forta de munca.</div>
+          <table class="dt"><thead><tr><th>Ocupatia</th><th>Cod COR</th><th>Nr. posturi vacante</th></tr></thead><tbody>
+            <tr><td class="bc">Lucrator comercial</td><td>COR 522303</td><td><input type="number" min="0" id="47_p1" placeholder="0"></td></tr>
+            <tr><td class="bc">Sef de magazin / Manager magazin</td><td>COR 142004</td><td><input type="number" min="0" id="47_p2" placeholder="0"></td></tr>
+            <tr><td class="bc">Administrator magazin online / Specialist Comert Electronic</td><td>COR 243105</td><td><input type="number" min="0" id="47_p3" placeholder="0"></td></tr>
+            <tr><td><input type="text" id="47_p4n" placeholder="Alt post..."></td><td></td><td><input type="number" min="0" id="47_p4" placeholder="0"></td></tr>
+          </tbody></table></div>
+        <div class="q"><div class="ql"><span class="qn">5</span>Pentru fiecare ocupatie, bifati <strong>competentele profesionale necesare</strong> (recomandat: minimum 5 din 10 per ocupatie)</div>
+          <div class="cblk">
+  <div class="chdr" onclick="tgc(this)"><span>Lucrator comercial</span><span class="cctr err" id="cnt_47_0">0 / 10 bifate</span></div>
+  <div class="cbdy" id="cb_47_0">
+    <p class="cnote">Recomandat: bifati minimum 5 din cele 10 competente pentru aceasta ocupatie.</p>
+    <div class="ccl"><label class="ci" id="ci_47_0_0"><input type="checkbox" name="chk_47_0" value="0" onchange="uc('47',0,'k47')"> Receptia cantitativa si calitativa a marfurilor sosite in magazin</label><label class="ci" id="ci_47_0_1"><input type="checkbox" name="chk_47_0" value="1" onchange="uc('47',0,'k47')"> Aprovizionarea corecta si constanta a rafturilor conform standardelor de mercantizare (FIFO)</label><label class="ci" id="ci_47_0_2"><input type="checkbox" name="chk_47_0" value="2" onchange="uc('47',0,'k47')"> Monitorizarea riguroasa a termenelor de valabilitate ale produselor alimentare si nealimentare</label><label class="ci" id="ci_47_0_3"><input type="checkbox" name="chk_47_0" value="3" onchange="uc('47',0,'k47')"> Aplicarea tehnicilor de vanzare directa si consiliere a clientilor</label><label class="ci" id="ci_47_0_4"><input type="checkbox" name="chk_47_0" value="4" onchange="uc('47',0,'k47')"> Afisarea corecta si actualizarea preturilor sau a etichetelor la raft</label><label class="ci" id="ci_47_0_5"><input type="checkbox" name="chk_47_0" value="5" onchange="uc('47',0,'k47')"> Operarea echipamentelor din magazin (feliatoare, cantare electronice, scannere)</label><label class="ci" id="ci_47_0_6"><input type="checkbox" name="chk_47_0" value="6" onchange="uc('47',0,'k47')"> Mentinerea curateniei si a igienei in zona de depozitare si de vanzare</label><label class="ci" id="ci_47_0_7"><input type="checkbox" name="chk_47_0" value="7" onchange="uc('47',0,'k47')"> Pregatirea produselor pentru promotii si implementarea campaniilor de marketing</label><label class="ci" id="ci_47_0_8"><input type="checkbox" name="chk_47_0" value="8" onchange="uc('47',0,'k47')"> Gestionarea stocurilor deteriorate sau expirate (completarea fiselor de retur/rebut)</label><label class="ci" id="ci_47_0_9"><input type="checkbox" name="chk_47_0" value="9" onchange="uc('47',0,'k47')"> Utilizarea corecta a echipamentelor de protectie si respectarea normelor de securitate in munca</label></div>
+  </div>
+</div><div class="cblk">
+  <div class="chdr" onclick="tgc(this)"><span>Sef de magazin / Manager magazin</span><span class="cctr err" id="cnt_47_1">0 / 10 bifate</span></div>
+  <div class="cbdy" id="cb_47_1">
+    <p class="cnote">Recomandat: bifati minimum 5 din cele 10 competente pentru aceasta ocupatie.</p>
+    <div class="ccl"><label class="ci" id="ci_47_1_0"><input type="checkbox" name="chk_47_1" value="0" onchange="uc('47',1,'k47')"> Coordonarea, evaluarea si motivarea echipei din subordine (lucratori comerciali, casieri, personal curatenie)</label><label class="ci" id="ci_47_1_1"><input type="checkbox" name="chk_47_1" value="1" onchange="uc('47',1,'k47')"> Planificarea schimburilor de lucru, a concediilor si organizarea eficienta a activitatii zilnice</label><label class="ci" id="ci_47_1_2"><input type="checkbox" name="chk_47_1" value="2" onchange="uc('47',1,'k47')"> Monitorizarea indicatorilor de performanta ai magazinului (vanzari, profitabilitate, cos mediu)</label><label class="ci" id="ci_47_1_3"><input type="checkbox" name="chk_47_1" value="3" onchange="uc('47',1,'k47')"> Gestionarea relatiei cu furnizorii si plasarea comenzilor de aprovizionare pe baza istoricului de vanzari</label><label class="ci" id="ci_47_1_4"><input type="checkbox" name="chk_47_1" value="4" onchange="uc('47',1,'k47')"> Supervizarea receptiei de marfa si asigurarea corectitudinii stocurilor in sistemul de gestiune</label><label class="ci" id="ci_47_1_5"><input type="checkbox" name="chk_47_1" value="5" onchange="uc('47',1,'k47')"> Implementarea planogramelor transmise de la sediul central si respectarea standardelor de mercantizare</label><label class="ci" id="ci_47_1_6"><input type="checkbox" name="chk_47_1" value="6" onchange="uc('47',1,'k47')"> Gestionarea bugetului magazinului si controlul pierderilor (rebuturi, furturi, deteriorari de marfa)</label><label class="ci" id="ci_47_1_7"><input type="checkbox" name="chk_47_1" value="7" onchange="uc('47',1,'k47')"> Rezolvarea reclamatiilor complexe ale clientilor si asigurarea unui standard inalt de servire</label><label class="ci" id="ci_47_1_8"><input type="checkbox" name="chk_47_1" value="8" onchange="uc('47',1,'k47')"> Asigurarea respectarii normelor legale de functionare (HACCP, protectia muncii, PSI)</label><label class="ci" id="ci_47_1_9"><input type="checkbox" name="chk_47_1" value="9" onchange="uc('47',1,'k47')"> Intocmirea rapoartelor periodice de vanzari si propunerea de masuri pentru cresterea eficientei</label></div>
+  </div>
+</div><div class="cblk">
+  <div class="chdr" onclick="tgc(this)"><span>Administrator magazin online / Specialist Comert Electronic</span><span class="cctr err" id="cnt_47_2">0 / 10 bifate</span></div>
+  <div class="cbdy" id="cb_47_2">
+    <p class="cnote">Recomandat: bifati minimum 5 din cele 10 competente pentru aceasta ocupatie.</p>
+    <div class="ccl"><label class="ci" id="ci_47_2_0"><input type="checkbox" name="chk_47_2" value="0" onchange="uc('47',2,'k47')"> Gestionarea si actualizarea catalogului de produse pe platforma e-commerce (titluri, descrieri, preturi)</label><label class="ci" id="ci_47_2_1"><input type="checkbox" name="chk_47_2" value="1" onchange="uc('47',2,'k47')"> Procesarea comenzilor primite in site, generarea AWB-urilor de livrare si prelucrarea facturilor fiscale</label><label class="ci" id="ci_47_2_2"><input type="checkbox" name="chk_47_2" value="2" onchange="uc('47',2,'k47')"> Utilizarea sistemelor ERP/WMS pentru sincronizarea stocurilor fizice cu cele afisate online</label><label class="ci" id="ci_47_2_3"><input type="checkbox" name="chk_47_2" value="3" onchange="uc('47',2,'k47')"> Gestionarea platformelor de procesare a platilor online (Netopia, Stripe, PayU) si verificarea tranzactiilor</label><label class="ci" id="ci_47_2_4"><input type="checkbox" name="chk_47_2" value="4" onchange="uc('47',2,'k47')"> Asigurarea suportului pentru clienti prin canale digitale (chat live, e-mail, telefon) si procesarea retururilor</label><label class="ci" id="ci_47_2_5"><input type="checkbox" name="chk_47_2" value="5" onchange="uc('47',2,'k47')"> Configurarea si monitorizarea promotiilor, a codurilor de reducere si a campaniilor de loializare</label><label class="ci" id="ci_47_2_6"><input type="checkbox" name="chk_47_2" value="6" onchange="uc('47',2,'k47')"> Analizarea comportamentului utilizatorilor folosind Google Analytics 4 (cosuri abandonate, rate conversie)</label><label class="ci" id="ci_47_2_7"><input type="checkbox" name="chk_47_2" value="7" onchange="uc('47',2,'k47')"> Colaborarea cu firmele de curierat si monitorizarea termenelor de livrare a coletelor</label><label class="ci" id="ci_47_2_8"><input type="checkbox" name="chk_47_2" value="8" onchange="uc('47',2,'k47')"> Optimizarea SEO primara a paginilor de produs (cuvinte cheie, meta-titluri, optimizare imagini)</label><label class="ci" id="ci_47_2_9"><input type="checkbox" name="chk_47_2" value="9" onchange="uc('47',2,'k47')"> Asigurarea conformitatii legale a site-ului cu normele GDPR, ANPC si OUG nr. 34/2014</label></div>
+  </div>
+</div>
+        </div>
+        <div class="q"><div class="ql"><span class="qn">6</span>Care programe de formare ar fi utile pentru acoperirea deficitului de personal?</div>
+          <table class="dt"><thead><tr><th>Nr.</th><th>Program de formare profesionala</th><th>Nr. posturi disponibile ce pot fi ocupate</th></tr></thead><tbody>
+            <tr><td>1</td><td>Lucrator comercial</td><td><input type="number" min="0" id="47_f1" placeholder="0"></td></tr>
+            <tr><td>2</td><td>Manager magazin / Retail Manager</td><td><input type="number" min="0" id="47_f2" placeholder="0"></td></tr>
+            <tr><td>3</td><td>Competente Antreprenoriale</td><td><input type="number" min="0" id="47_f3" placeholder="0"></td></tr>
+            <tr><td>4</td><td>Specialist E-commerce</td><td><input type="number" min="0" id="47_f4" placeholder="0"></td></tr>
+            <tr><td>5</td><td><input type="text" id="47_f5n" placeholder="Altul. Care anume?"></td><td><input type="number" min="0" id="47_f5" placeholder="0"></td></tr>
+          </tbody></table></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="ssec" style="display:none;">
+    <div class="ss">
+      <p class="dt2">Declar ca informatiile furnizate reflecta situatia existenta la data completarii chestionarului.</p>
+      <div class="fsgn">
+        <div class="fl"><label>Semnatura / Confirmare</label><input type="text" id="fsn" placeholder="Numele complet al reprezentantului"></div>
+        <button class="bsub" onclick="subm()">Trimite chestionarul</button>
+      </div>
+      <div class="serr" id="serr"></div>
+      <div class="sok" id="sok">&#9989; Chestionar trimis cu succes! Raspunsurile au fost salvate.</div>
+    </div>
+  </div>
+</div>
+
+<!-- STATS VIEW -->
+<div id="v1" class="sv">
+  <div class="pwg" id="pwg">
+    <h2>&#128274; Acces restrictionat</h2>
+    <p>Aceasta sectiune este accesibila doar administratorului proiectului.<br>Introduceti parola pentru a continua.</p>
+    <input type="password" id="pwin" placeholder="Parola" onkeydown="if(event.key==='Enter')chkpw()">
+    <button class="bul" onclick="chkpw()">Acceseaza statisticile</button>
+    <div class="pwe" id="pwe"></div>
+  </div>
+  <div class="stp" id="stp">
+    <div class="sth">
+      <div class="sttl"><span class="dot"></span>Statistici in timp real</div>
+      <div>
+        <button class="ba bbl" onclick="ldst()">&#8635; Actualizeaza</button>
+        <button class="ba bgn" onclick="doEx()">&#11015; Export CSV</button>
+        <button class="ba brd" onclick="doCl()">&#128465; Sterge toate</button>
+      </div>
+    </div>
+    <div id="stc"></div>
+  </div>
+</div>
+</div>
+
+<script>
+const SKEY='iti_vj_r2026';
+const COMPS={"62": [{"occ": "Operator introducere, validare si prelucrare date", "items": ["Culegerea si introducerea rapida a datelor in baze de date specifice", "Validarea si verificarea acuratetatii datelor introduse prin comparare cu documentele primare", "Corectarea erorilor de culegere, omitere sau duplicare identificate in fluxul de date", "Arhivarea digitala si organizarea logica a documentelor electronice procesate", "Transpunerea informatiilor din format fizic in format electronic (Excel, baze de date SQL)", "Prelucrarea primara a datelor (sortari, filtrari, formule matematice sau logice simple)", "Generarea de rapoarte periodice sintetice pe baza datelor introduse in sistem", "Asigurarea confidentialitatii si securitatii informatiilor procesate conform normelor GDPR", "Efectuarea de copii de siguranta (backup) periodice pentru bazele de date administrate", "Colaborarea cu departamentele conexe pentru clarificarea neconcordantelor din documentele sursa"]}, {"occ": "Administrator pagini web / Web Administrator", "items": ["Instalarea, configurarea si actualizarea platformelor CMS (WordPress, Joomla, Drupal)", "Utilizarea panourilor de control pentru gazduire web (cPanel, Plesk) si gestionarea serverelor FTP", "Monitorizarea timpului de functionare a site-ului si rezolvarea rapida a erorilor de server", "Configurarea, gestionarea si securizarea bazelor de date atasate site-ului si backup-urilor periodice", "Implementarea protocoalelor de securitate cibernetica (certificate SSL, firewall, scanare malware)", "Cunoasterea si aplicarea limbajelor HTML5 si CSS3 pentru modificari structurale si de design", "Gestionarea conturilor de e-mail asociate domeniului web (creare adrese, configurare IMAP/POP3/SMTP)", "Integrarea si monitorizarea instrumentelor de analiza a traficului web (Google Analytics, Search Console)", "Optimizarea vitezei de incarcare a paginilor prin tehnici de compresie, cache si minificare", "Verificarea compatibilitatii si optimizarea afisarii site-ului pe diferite browsere si dispozitive mobile"]}, {"occ": "Administrator baze de date", "items": ["Proiectarea arhitecturii logice si fizice a bazelor de date conform cerintelor tehnice", "Scrierea, optimizarea si depanarea interogarilor complexe si a scripturilor SQL", "Instalarea, configurarea si administrarea sistemelor RDBMS (MySQL, PostgreSQL, SQL Server, Oracle)", "Implementarea politicilor de securitate, criptare a datelor si gestionarea drepturilor de acces", "Elaborarea, testarea si executarea planurilor de recuperare in caz de dezastru (Disaster Recovery)", "Monitorizarea performantei serverelor de baze de date si identificarea blocajelor (bottlenecks)", "Efectuarea operatiunilor de migrare a datelor intre sisteme si asigurarea integritatii referentiale", "Configurarea sistemelor de replicare si clusterizare pentru disponibilitate ridicata (High Availability)", "Utilizarea tehnologiilor NoSQL (MongoDB, Redis) pentru gestionarea datelor nestructurate", "Documentarea tehnica riguroasa a structurii bazei de date, schemelor si procedurilor stocate"]}, {"occ": "Analist date (Data Analyst)", "items": ["Extragerea volumelor mari de date din surse diverse (baze de date SQL, fisiere Excel/CSV, API-uri)", "Curatarea, transformarea si prelucrarea seturilor de date brute (Data Cleaning)", "Utilizarea limbajelor Python (Pandas, NumPy) sau R pentru manipularea datelor", "Crearea de dashboard-uri interactive si rapoarte vizuale in instrumente Business Intelligence (Power BI, Tableau)", "Aplicarea metodelor statistice (corelatii, medii, distributii, regresii) pentru identificarea tendintelor", "Proiectarea proceselor de colectare automatizata a datelor pentru actualizarea KPI-urilor", "Traducerea analizelor tehnice complexe in recomandari comerciale clare pentru management", "Efectuarea analizelor comparative (A/B testing) si interpretarea comportamentului utilizatorilor", "Colaborarea cu inginerii de date (Data Engineers) pentru optimizarea structurilor de date", "Asigurarea conformitatii proceselor de analiza a datelor cu normele GDPR"]}], "43": [{"occ": "Instalator pentru pompe de caldura", "items": ["Dimensionarea preliminara si stabilirea locului optim de amplasare a unitatilor interne si externe", "Montarea mecanica a pompelor de caldura (aer-aer, aer-apa, sol-apa) pe suporturi antivibratii", "Executarea conexiunilor hidraulice intre pompa, puffer, boiler si instalatia interioara", "Realizarea traseelor frigorifice din cupru (taiere, indoire, sudura, izolare termica)", "Efectuarea testelor de etanseitate cu azot la presiune inalta a circuitului frigorific", "Vidarea sistemului frigorific si incarcarea cu agent frigorific (R32, R290, R410A)", "Legarea componentelor electrice, a senzorilor de temperatura si a termostatelor de ambient", "Punerea in functiune, calibrarea parametrilor de lucru si setarea curbelor de incalzire", "Diagnosticarea anomaliilor in functionare prin analiza presiunilor si temperaturilor de lucru", "Efectuarea lucrarilor de mentenanta periodica (curatare filtre, verificare presiune, igienizare)"]}, {"occ": "Instalator pentru sisteme fotovoltaice solare", "items": ["Citirea si interpretarea schemelor electrice, a planurilor de amplasare si a proiectului tehnic", "Montarea structurilor metalice de sustinere a panourilor pe diferite tipuri de acoperisuri sau la sol", "Ancorarea si fixarea mecanica securizata a modulelor fotovoltaice pe structura de suport", "Realizarea conexiunilor electrice in serie si paralel ale panourilor (cablare DC, sertizare mufe MC4)", "Pozitionarea, fixarea si conectarea invertorului, a controllerului de incarcare si a bateriilor", "Montarea tablourilor electrice de protectie (sigurante fuzibile DC/AC, descarcatoare de supratensiune)", "Realizarea legaturilor de impamanare a structurii metalice si a panourilor fotovoltaice", "Masurarea parametrilor electrici de functionare (tensiune Voc, curent de scurtcircuit Isc)", "Configurarea software a invertorului, setarea parametrilor de retea si monitorizarea Wi-Fi", "Depanarea sistemelor fotovoltaice (identificare panouri defecte, cabluri intrerupte, erori invertor)"]}, {"occ": "Electrician constructor", "items": ["Citirea diagramelor monofilare si interpretarea planurilor instalatiei electrice a cladirii", "Montarea tuburilor de protectie (cofrag, PVC) si a dozelor de aparat/legatura in pereti sau tavane", "Traficarea (tragerea) cablurilor electrice prin tuburile de protectie conform circuitelor proiectate", "Montarea, echiparea si cablarea tablourilor electrice de distributie (disjunctoare, diferentiale, contactoare)", "Instalarea aparatelor terminale (intrerupatoare, prize de curent, prize de date, senzori de miscare)", "Montarea corpurilor de iluminat de interior si exterior, a sistemelor de iluminat de urgenta", "Executarea si masurarea prizelor de pamant (impamanare) si instalarea sistemelor de paratrasnete", "Verificarea continuitatii circuitelor si testarea izolatiei cablurilor inainte de punerea sub tensiune", "Instalarea sistemelor de curenti slabi (interfoane, sisteme de alarma, cablare TV/Internet)", "Remedierea defectiunilor electrice (scurtcircuite, suprasarcini, contacte imperfecte)"]}, {"occ": "Instalator tehnico-sanitar si de gaze", "items": ["Trasarea pe pozitie a traseelor pentru conductele de alimentare cu apa si evacuare menajera", "Fasonarea, taierea si imbinarea tevilor din diverse materiale (PPR, PEX, cupru, PVC, fonta)", "Montarea obiectelor sanitare (laveoare, vase WC, cazi de baie, cabine de dus, baterii mixatoare)", "Instalarea sistemelor de incalzire clasice (radiatoare, robineti termostati, distribuitoare)", "Montarea sistemelor moderne de incalzire in pardoseala (folie tacker, caroiaj, fixare tevi)", "Instalarea centralelor termice pe gaz sau combustibil solid si a sistemelor de evacuare a gazelor arse", "Realizarea probelor de etanseitate si presiune (hidraulice/pneumatice) pe circuitele montate", "Montarea aparatelor de masura si control (apometre, regulatoare de presiune, filtre de apa)", "Izolarea termica a conductelor de apa calda si rece pentru prevenirea pierderilor si a condensului", "Identificarea si remedierea avariilor (scurgeri de apa, tevi infundate, inlocuiri de garnituri/robineti)"]}, {"occ": "Zugrav", "items": ["Pregatirea corecta a suprafetelor (decapare tapet, curatare vopsea veche, spalare, degresare)", "Aplicarea gleturilor de incarcare si de finisaj pentru indreptarea peretilor si tavanelor", "Efectuarea operatiunilor de slefuire si desprafuire mecanica sau manuala a suprafetelor", "Aplicarea straturilor de amorsa potrivite tipului de suport (beton, gips-carton, tencuiala)", "Prepararea si diluarea vopselelor lavabile, acrilice sau silicatice conform fiselor tehnice", "Aplicarea vopselelor folosind trafaletul, pensula sau aparatele de pulverizare airless", "Executarea lucrarilor decorative speciale (stucco veneziano, efecte metalice, texturate)", "Montarea profilelor decorative din polistiren, poliuretan sau a tapetului", "Protejarea suprafetelor adiacente din spatiul de lucru (banda de mascare, folii)", "Calculul necesarului de materiale si al pierderilor pe baza releveului suprafetelor"]}, {"occ": "Masinist la masini pentru terasamente", "items": ["Operarea in conditii de siguranta a utilajelor de terasamente (excavatoare, buldozere, compactoare)", "Executarea lucrarilor de sapatura, nivelare si compactare a terenului conform proiectului", "Respectarea planurilor topografice si a cotelor de executie prescrise", "Verificarea si efectuarea inspectiilor tehnice zilnice ale utilajului inainte de pornire", "Remedierea defectiunilor minore si sesizarea prompta a celor majore serviciului de intretinere", "Asigurarea securitatii la locul de munca si respectarea normelor PSI si de protectie a muncii", "Executarea lucrarilor in conditii de siguranta in santuri, fundatii si zone cu risc de surpare", "Curatarea si intretinerea curenta a utilajelor si echipamentelor din dotare", "Colaborarea cu echipa de executie pentru respectarea graficului de lucrari si a calitatii", "Completarea corecta a documentelor de lucru (foi de parcurs, fise de pontaj, registre utilaj)"]}], "47": [{"occ": "Lucrator comercial", "items": ["Receptia cantitativa si calitativa a marfurilor sosite in magazin", "Aprovizionarea corecta si constanta a rafturilor conform standardelor de mercantizare (FIFO)", "Monitorizarea riguroasa a termenelor de valabilitate ale produselor alimentare si nealimentare", "Aplicarea tehnicilor de vanzare directa si consiliere a clientilor", "Afisarea corecta si actualizarea preturilor sau a etichetelor la raft", "Operarea echipamentelor din magazin (feliatoare, cantare electronice, scannere)", "Mentinerea curateniei si a igienei in zona de depozitare si de vanzare", "Pregatirea produselor pentru promotii si implementarea campaniilor de marketing", "Gestionarea stocurilor deteriorate sau expirate (completarea fiselor de retur/rebut)", "Utilizarea corecta a echipamentelor de protectie si respectarea normelor de securitate in munca"]}, {"occ": "Sef de magazin / Manager magazin", "items": ["Coordonarea, evaluarea si motivarea echipei din subordine (lucratori comerciali, casieri, personal curatenie)", "Planificarea schimburilor de lucru, a concediilor si organizarea eficienta a activitatii zilnice", "Monitorizarea indicatorilor de performanta ai magazinului (vanzari, profitabilitate, cos mediu)", "Gestionarea relatiei cu furnizorii si plasarea comenzilor de aprovizionare pe baza istoricului de vanzari", "Supervizarea receptiei de marfa si asigurarea corectitudinii stocurilor in sistemul de gestiune", "Implementarea planogramelor transmise de la sediul central si respectarea standardelor de mercantizare", "Gestionarea bugetului magazinului si controlul pierderilor (rebuturi, furturi, deteriorari de marfa)", "Rezolvarea reclamatiilor complexe ale clientilor si asigurarea unui standard inalt de servire", "Asigurarea respectarii normelor legale de functionare (HACCP, protectia muncii, PSI)", "Intocmirea rapoartelor periodice de vanzari si propunerea de masuri pentru cresterea eficientei"]}, {"occ": "Administrator magazin online / Specialist Comert Electronic", "items": ["Gestionarea si actualizarea catalogului de produse pe platforma e-commerce (titluri, descrieri, preturi)", "Procesarea comenzilor primite in site, generarea AWB-urilor de livrare si prelucrarea facturilor fiscale", "Utilizarea sistemelor ERP/WMS pentru sincronizarea stocurilor fizice cu cele afisate online", "Gestionarea platformelor de procesare a platilor online (Netopia, Stripe, PayU) si verificarea tranzactiilor", "Asigurarea suportului pentru clienti prin canale digitale (chat live, e-mail, telefon) si procesarea retururilor", "Configurarea si monitorizarea promotiilor, a codurilor de reducere si a campaniilor de loializare", "Analizarea comportamentului utilizatorilor folosind Google Analytics 4 (cosuri abandonate, rate conversie)", "Colaborarea cu firmele de curierat si monitorizarea termenelor de livrare a coletelor", "Optimizarea SEO primara a paginilor de produs (cuvinte cheie, meta-titluri, optimizare imagini)", "Asigurarea conformitatii legale a site-ului cu normele GDPR, ANPC si OUG nr. 34/2014"]}]};
+let SC=null, ART=null, STU=false, CHS={};
+
+function gv(i){
+  document.getElementById('v0').style.display=i===0?'block':'none';
+  document.getElementById('v1').style.display=i===1?'block':'none';
+  document.getElementById('nb1').classList.toggle('on',i===0);
+  document.getElementById('nb2').classList.toggle('on',i===1);
+  if(i===1&&STU){ldst();startAR();}
+  else if(i===0)stopAR();
+}
+
+function selC(c){
+  SC=c;
+  ['62','43','47'].forEach(x=>{
+    document.getElementById('btn'+x).className='cbtn'+(x===c?' s'+x:'');
+    document.getElementById('fisa'+x).style.display=x===c?'block':'none';
+  });
+  document.getElementById('ssec').style.display='block';
+  document.getElementById('sok').style.display='none';
+  document.getElementById('serr').style.display='none';
+  setTimeout(()=>document.getElementById('fisa'+c).scrollIntoView({behavior:'smooth',block:'start'}),100);
+}
+
+function tgc(el){el.nextElementSibling.classList.toggle('op');}
+
+function uc(c,oi,cls){
+  const n=document.querySelectorAll(`input[name="chk_${c}_${oi}"]:checked`).length;
+  const ct=document.getElementById(`cnt_${c}_${oi}`);
+  ct.textContent=n+' / 10 bifate';
+  ct.className='cctr '+(n>=5?'ok':'err');
+  document.querySelectorAll(`input[name="chk_${c}_${oi}"]`).forEach(cb=>{
+    cb.closest('.ci').className='ci'+(cb.checked?' '+cls:'');
+  });
+}
+
+document.addEventListener('change',function(e){
+  if(e.target.type==='radio'){
+    const g=e.target.closest('.rg');
+    if(g)g.querySelectorAll('.ro').forEach(o=>o.classList.remove('on'));
+    e.target.closest('.ro')?.classList.add('on');
+  }
+});
+
+function chkpw(){
+  if(document.getElementById('pwin').value==='PEOITIVJ2026'){
+    document.getElementById('pwg').style.display='none';
+    document.getElementById('stp').style.display='block';
+    STU=true;ldst();startAR();
+  }else{document.getElementById('pwe').textContent='Parola incorecta. Incercati din nou.';document.getElementById('pwin').value='';}
+}
+
+const BIN_ID='6a3140a4da38895dfec9660d';
+const API_KEY='$2a$10$/8WQB28pL7..1pPghJM0k.OsxG8Oqw7A5uI7ZxpicSUOeonIF5C66';
+const BIN_URL='https://api.jsonbin.io/v3/b/'+BIN_ID;
+
+async function saveR(r){
+  try{
+    const HDRS={'X-Master-Key':API_KEY,'X-Bin-Private':'false','Content-Type':'application/json'};
+    const get=await fetch(BIN_URL+'/latest',{headers:HDRS});
+    if(!get.ok){console.error('GET failed',get.status,await get.text());return false;}
+    const data=await get.json();
+    let arr=Array.isArray(data.record)?data.record:[];
+    if(arr.length===1&&typeof arr[0]==='object'&&Object.keys(arr[0]).length===0)arr=[];
+    arr.push(r);
+    const put=await fetch(BIN_URL,{method:'PUT',headers:HDRS,body:JSON.stringify(arr)});
+    if(!put.ok){console.error('PUT failed',put.status,await put.text());return false;}
+    return true;
+  }catch(e){console.error('saveR error:',e);return false;}
+}
+async function loadR(){
+  try{
+    const HDRS={'X-Master-Key':API_KEY,'X-Bin-Private':'false'};
+    const get=await fetch(BIN_URL+'/latest',{headers:HDRS});
+    if(!get.ok)return[];
+    const data=await get.json();
+    let arr=Array.isArray(data.record)?data.record:[];
+    if(arr.length===1&&typeof arr[0]==='object'&&Object.keys(arr[0]).length===0)return[];
+    return arr;
+  }catch(e){return[];}
+}
+async function delR(){
+  try{
+    const HDRS={'X-Master-Key':API_KEY,'X-Bin-Private':'false','Content-Type':'application/json'};
+    await fetch(BIN_URL,{method:'PUT',headers:HDRS,body:'[{}]'});
+  }catch(e){}
+}
+
+function setL(on){document.getElementById('ldr').className='ld'+(on?' on':'');}
+function shErr(m){const b=document.getElementById('serr');b.textContent=m;b.style.display='block';b.scrollIntoView({behavior:'smooth',block:'center'});}
+
+async function subm(){
+  // Validare campuri obligatorii - date generale
+  const req=[
+    {id:'fa',label:'Agent economic'},
+    {id:'fc',label:'CUI'},
+    {id:'flo',label:'Localitate'},
+    {id:'frp',label:'Reprezentant'},
+    {id:'fsn',label:'Semnatura / Confirmare'}
+  ];
+  for(const f of req){
+    const el=document.getElementById(f.id);
+    if(!el||!el.value.trim()){
+      if(el){el.style.borderColor='#ef4444';el.scrollIntoView({behavior:'smooth',block:'center'});el.focus();}
+      shErr('Campul "'+f.label+'" este obligatoriu.');
+      return;
+    }else if(el){el.style.borderColor='';}
+  }
+  if(!document.querySelector('input[name="niv"]:checked')){
+    shErr('Va rugam selectati nivelul de decizie al respondentului.');
+    document.querySelector('.rg')?.scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+  if(!SC){
+    shErr('Va rugam selectati codul CAEN al firmei.');
+    document.getElementById('btn62')?.scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+  if(!document.querySelector(`input[name="q1_${SC}"]:checked`)||
+     !document.querySelector(`input[name="q2_${SC}"]:checked`)||
+     !document.querySelector(`input[name="q3_${SC}"]:checked`)){
+    shErr('Va rugam raspundeti la intrebarile 1, 2 si 3 din fisa CAEN.');
+    document.getElementById('fisa'+SC)?.scrollIntoView({behavior:'smooth',block:'start'});
+    return;
+  }
+  setL(true);
+  const gv2=id=>{const e=document.getElementById(id);return e?e.value.trim():'';}
+  const gn=id=>{const e=document.getElementById(id);return e?(parseInt(e.value)||0):0;}
+  const gr=n=>{const e=document.querySelector(`input[name="${n}"]:checked`);return e?e.value:'';}
+  const gc=(c,oi)=>{const r=[];document.querySelectorAll(`input[name="chk_${c}_${oi}"]:checked`).forEach(cb=>r.push(COMPS[c][oi].items[+cb.value]));return r;}
+  const now=new Date();
+  const rec={id:Date.now(),data:now.toLocaleDateString('ro-RO'),ora:now.toLocaleTimeString('ro-RO'),
+    agent:gv2('fa'),cui:gv2('fc'),caen_sel:SC,caen_in:gv2('fca'),dom:gv2('fd'),
+    adr:gv2('fad'),loc:gv2('flo'),jud:gv2('fj'),tel:gv2('ft'),email:gv2('fe'),
+    sal:gn('fs'),med:gn('fm'),rep:gv2('frp'),nivel:gr('niv'),semn:gv2('fsn'),comp:{}};
+  occs.forEach((o,oi)=>rec.comp[o.occ]=gc(SC,oi));
+  if(SC==='62'){
+    rec.q1=gr('q1_62');rec.q2=gr('q2_62');rec.q3=gr('q3_62');
+    rec.post={'Operator introducere date':gn('62_p1'),'Web Administrator':gn('62_p2'),'Administrator BD':gn('62_p3'),'Data Analyst':gn('62_p4'),[gv2('62_p5n')||'Alt post']:gn('62_p5')};
+    rec.form={'Operator introducere date':gn('62_f1'),'Web Designer/Admin site':gn('62_f2'),'Administrator BD':gn('62_f3'),'Data Analyst':gn('62_f4'),[gv2('62_f5n')||'Altul']:gn('62_f5')};
+  }else if(SC==='43'){
+    rec.q1=gr('q1_43');rec.q2=gr('q2_43');rec.q3=gr('q3_43');
+    rec.post={'Instalator pompe caldura':gn('43_p1'),'Instalator fotovoltaice':gn('43_p2'),'Electrician constructor':gn('43_p3'),'Instalator sanitare/gaze':gn('43_p4'),'Zugrav':gn('43_p5'),'Masinist terasamente':gn('43_p6'),[gv2('43_p7n')||'Alt post']:gn('43_p7')};
+    rec.form={'Instalator pompe caldura':gn('43_f1'),'Tehnician incalzire/climatizare':gn('43_f2'),'Instalator fotovoltaice':gn('43_f3'),'Electrician joasa tensiune':gn('43_f4'),'Electrician constructor':gn('43_f5'),'Instalator sanitare/gaze':gn('43_f6'),'Zugrav':gn('43_f7'),'Masinist terasamente':gn('43_f8'),[gv2('43_f9n')||'Altul']:gn('43_f9')};
+  }else{
+    rec.q1=gr('q1_47');rec.q2=gr('q2_47');rec.q3=gr('q3_47');
+    rec.post={'Lucrator comercial':gn('47_p1'),'Manager magazin':gn('47_p2'),'Specialist e-commerce':gn('47_p3'),[gv2('47_p4n')||'Alt post']:gn('47_p4')};
+    rec.form={'Lucrator comercial':gn('47_f1'),'Manager magazin':gn('47_f2'),'Competente antreprenoriale':gn('47_f3'),'Specialist E-commerce':gn('47_f4'),[gv2('47_f5n')||'Altul']:gn('47_f5')};
+  }
+  const ok=await saveR(rec);
+  setL(false);
+  if(ok){
+    document.getElementById('serr').style.display='none';
+    document.getElementById('sok').style.display='block';
+    document.getElementById('sok').scrollIntoView({behavior:'smooth'});
+    setTimeout(()=>{
+      document.querySelectorAll('#fisa62 input,#fisa43 input,#fisa47 input').forEach(e=>e.value='');
+      document.querySelectorAll('#fisa62 input[type=radio],#fisa43 input[type=radio],#fisa47 input[type=radio],#fisa62 input[type=checkbox],#fisa43 input[type=checkbox],#fisa47 input[type=checkbox]').forEach(e=>e.checked=false);
+      document.querySelectorAll('.ro').forEach(e=>e.classList.remove('on'));
+      document.querySelectorAll('.ci').forEach(e=>e.className='ci');
+      document.querySelectorAll('.cbdy').forEach(e=>e.classList.remove('op'));
+      document.querySelectorAll('[id^="cnt_"]').forEach(e=>{e.textContent='0 / 10 bifate';e.className='cctr err';});
+      ['62','43','47'].forEach(x=>{document.getElementById('fisa'+x).style.display='none';document.getElementById('btn'+x).className='cbtn';});
+      document.getElementById('ssec').style.display='none';
+      document.getElementById('sok').style.display='none';
+      SC=null;
+      window.scrollTo({top:0,behavior:'smooth'});
+    },3000);
+  }else shErr('A aparut o eroare la salvare. Va rugam incercati din nou.');
+}
+
+function startAR(){stopAR();ART=setInterval(()=>{if(STU)ldst();},30000);}
+function stopAR(){if(ART){clearInterval(ART);ART=null;}}
+
+async function ldst(){renderSt(await loadR());}
+
+function renderSt(recs){
+  const el=document.getElementById('stc');
+  if(!recs.length){el.innerHTML='<div style="text-align:center;padding:60px 20px;color:var(--mu);font-size:15px;"><div style="font-size:48px;margin-bottom:12px;">&#128203;</div><p>Nu exista raspunsuri inregistrate inca.</p></div>';return;}
+  const tot=recs.length;
+  const r62=recs.filter(r=>r.caen_sel==='62'),r43=recs.filter(r=>r.caen_sel==='43'),r47=recs.filter(r=>r.caen_sel==='47');
+  Object.values(CHS).forEach(c=>{try{c.destroy();}catch(e){}}); CHS={};
+  const last=recs[recs.length-1];
+  el.innerHTML=`
+  <div class="sg">
+    <div class="sc"><div class="sb">${tot}</div><div class="sl">Total chestionare</div></div>
+    <div class="sc"><div class="sb" style="color:var(--c62)">${r62.length}</div><div class="sl">CAEN 62 IT</div></div>
+    <div class="sc"><div class="sb" style="color:var(--c43)">${r43.length}</div><div class="sl">CAEN 43 Constructii</div></div>
+  </div>
+  <div class="sg">
+    <div class="sc"><div class="sb" style="color:var(--c47)">${r47.length}</div><div class="sl">CAEN 47 Comert</div></div>
+    <div class="sc"><div class="sb">${recs.filter(r=>r.q1==='Relativ dificil'||r.q1==='Foarte dificil').length}</div><div class="sl">Dificultati recrutare</div></div>
+    <div class="sc"><div class="sb">${recs.filter(r=>r.q2==='Da').length}</div><div class="sl">Au posturi vacante</div></div>
+  </div>
+  <p style="font-size:12px;color:var(--mu);margin-bottom:14px;">Ultimul raspuns: ${last?last.data+' '+last.ora+' - '+(last.agent||'firma nespecificata'):'–'} &nbsp;·&nbsp; Auto-actualizare la 30 sec.</p>
+  <div class="cg">
+    <div class="cc"><div class="cct">Distributie pe coduri CAEN</div><canvas id="ch1"></canvas></div>
+    <div class="cc"><div class="cct">Usurinta recrutarii (Q1)</div><canvas id="ch2"></canvas></div>
+    <div class="cc"><div class="cct">Posturi vacante (Q2)</div><canvas id="ch3"></canvas></div>
+    <div class="cc"><div class="cct">Politica personal 12 luni (Q3)</div><canvas id="ch4"></canvas></div>
+    <div class="cc full"><div class="cct">Total posturi vacante pe ocupatii</div><canvas id="ch5"></canvas></div>
+    <div class="cc full"><div class="cct">Nevoi de formare profesionala</div><canvas id="ch6"></canvas></div>
+    <div class="cc full"><div class="cct">Top 15 competente bifate (toate CAEN)</div><canvas id="ch7"></canvas></div>
+  </div>
+  <div class="card" style="margin-top:8px;">
+    <div class="ch">Lista completa a raspunsurilor</div>
+    <div style="overflow-x:auto;">
+      <table class="rt">
+        <thead><tr><th>#</th><th>Data / Ora</th><th>Agent</th><th>CUI</th><th>CAEN</th><th>Localitate</th><th>Sal.</th><th>Q1</th><th>Q2</th><th>Q3</th><th>Reprezentant</th></tr></thead>
+        <tbody>${recs.map((r,i)=>`<tr><td>${i+1}</td><td>${r.data} ${r.ora||''}</td><td>${r.agent||'—'}</td><td>${r.cui||'—'}</td><td><span class="bdg b${r.caen_sel}">${r.caen_sel}</span></td><td>${r.loc||'—'}</td><td>${r.sal||0}</td><td>${r.q1||'—'}</td><td>${r.q2||'—'}</td><td>${r.q3||'—'}</td><td>${r.rep||'—'}</td></tr>`).join('')}</tbody>
+      </table>
+    </div>
+  </div>`;
+  CHS.c1=new Chart(document.getElementById('ch1'),{type:'doughnut',data:{labels:['CAEN 62 IT','CAEN 43 Constructii','CAEN 47 Comert'],datasets:[{data:[r62.length,r43.length,r47.length],backgroundColor:['#2563eb','#d97706','#059669'],borderWidth:2,borderColor:'#fff'}]},options:{plugins:{legend:{position:'bottom'}},cutout:'60%'}});
+  const q1v=['Foarte usor','Relativ usor','Relativ dificil','Foarte dificil'];
+  CHS.c2=new Chart(document.getElementById('ch2'),{type:'bar',data:{labels:q1v,datasets:[{label:'Nr. firme',data:q1v.map(v=>recs.filter(r=>r.q1===v).length),backgroundColor:['#059669','#34d399','#f59e0b','#ef4444'],borderRadius:6}]},options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{stepSize:1}}}}});
+  const q2da=recs.filter(r=>r.q2==='Da').length;
+  CHS.c3=new Chart(document.getElementById('ch3'),{type:'doughnut',data:{labels:['Da','Nu'],datasets:[{data:[q2da,tot-q2da],backgroundColor:['#2563eb','#e5e7eb'],borderWidth:2,borderColor:'#fff'}]},options:{plugins:{legend:{position:'bottom'}},cutout:'60%'}});
+  const q3a=recs.filter(r=>r.q3==='Intentionam angajari').length;
+  CHS.c4=new Chart(document.getElementById('ch4'),{type:'doughnut',data:{labels:['Intentionam angajari','Nu intentionam'],datasets:[{data:[q3a,tot-q3a],backgroundColor:['#059669','#e5e7eb'],borderWidth:2,borderColor:'#fff'}]},options:{plugins:{legend:{position:'bottom'}},cutout:'60%'}});
+  const pA={};recs.forEach(r=>{if(r.post)Object.entries(r.post).forEach(([k,v])=>{if(v>0&&k&&k!=='Alt post')pA[k]=(pA[k]||0)+v;});});
+  const pk=Object.keys(pA);
+  CHS.c5=new Chart(document.getElementById('ch5'),{type:'bar',data:{labels:pk.length?pk:['(nimic completat)'],datasets:[{label:'Nr. posturi',data:pk.length?pk.map(k=>pA[k]):[0],backgroundColor:'#2563eb',borderRadius:5}]},options:{indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{stepSize:1}}}}});
+  const fA={};recs.forEach(r=>{if(r.form)Object.entries(r.form).forEach(([k,v])=>{if(v>0&&k&&k!=='Altul')fA[k]=(fA[k]||0)+v;});});
+  const fk=Object.keys(fA);
+  CHS.c6=new Chart(document.getElementById('ch6'),{type:'bar',data:{labels:fk.length?fk:['(nimic completat)'],datasets:[{label:'Nr. posturi',data:fk.length?fk.map(k=>fA[k]):[0],backgroundColor:'#059669',borderRadius:5}]},options:{indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{stepSize:1}}}}});
+  const cA={};recs.forEach(r=>{if(r.comp)Object.values(r.comp).forEach(arr=>{arr.forEach(c=>{const s=c.length>65?c.substring(0,65)+'…':c;cA[s]=(cA[s]||0)+1;});});});
+  const cs=Object.entries(cA).sort((a,b)=>b[1]-a[1]).slice(0,15);
+  CHS.c7=new Chart(document.getElementById('ch7'),{type:'bar',data:{labels:cs.map(x=>x[0]),datasets:[{label:'De cate ori bifata',data:cs.map(x=>x[1]),backgroundColor:'#7c3aed',borderRadius:5}]},options:{indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{stepSize:1}}}}});
+}
+
+async function doEx(){
+  const recs=await loadR();
+  if(!recs.length){alert('Nu exista date de exportat.');return;}
+
+  const allComps={};
+  ['62','43','47'].forEach(c=>COMPS[c].forEach(o=>{allComps[o.occ]=o.items;}));
+
+  const allPost=new Set();
+  recs.forEach(r=>{if(r.post)Object.keys(r.post).forEach(k=>{if(k&&k!=='Alt post'&&k!=='undefined')allPost.add(k);});});
+  const postList=[...allPost];
+
+  const allForm=new Set();
+  recs.forEach(r=>{if(r.form)Object.keys(r.form).forEach(k=>{if(k&&k!=='Altul'&&k!=='undefined')allForm.add(k);});});
+  const formList=[...allForm];
+
+  const allOcc=new Set();
+  recs.forEach(r=>{if(r.comp)Object.keys(r.comp).forEach(k=>allOcc.add(k));});
+  const occList=[...allOcc];
+
+  const SEP=';';
+  const esc=v=>{
+    const s=String(v===undefined||v===null?'':v);
+    if(s.includes(SEP)||s.includes('"')||s.includes('\n'))return'"'+s.replace(/"/g,'""')+'"';
+    return s;
+  };
+
+  const header=[
+    'ID','Data','Ora','Agent economic','CUI','CAEN selectat','CAEN declarat','Domeniu activitate',
+    'Adresa','Localitate','Judet','Telefon','Email',
+    'Nr. salariati','Media angajati 2025','Reprezentant','Nivel decizie','Semnatura',
+    'Q1 - Usurinta recrutare','Q2 - Posturi vacante Da/Nu','Q3 - Politica angajari 12 luni',
+    ...postList.map(p=>'Posturi vacante: '+p),
+    ...formList.map(f=>'Formare necesara: '+f),
+    ...occList.map(o=>'Nr. competente bifate - '+o),
+    ...occList.flatMap(o=>(allComps[o]||[]).map((it,ii)=>'Comp.'+(ii+1)+' ['+o.substring(0,25)+'...]: '+it.substring(0,40)))
+  ].map(esc).join(SEP);
+
+  const rows=recs.map(r=>{
+    const base=[
+      r.id, r.data, r.ora||'',
+      r.agent||'', r.cui||'', r.caen_sel||'', r.caen_in||'', r.dom||'',
+      r.adr||'', r.loc||'', r.jud||'', r.tel||'', r.email||'',
+      r.sal||0, r.med||0, r.rep||'', r.nivel||'', r.semn||'',
+      r.q1||'', r.q2||'', r.q3||''
+    ];
+    const posturi=postList.map(p=>(r.post&&r.post[p])?r.post[p]:0);
+    const formare=formList.map(f=>(r.form&&r.form[f])?r.form[f]:0);
+    const nrComp=occList.map(o=>(r.comp&&r.comp[o])?r.comp[o].length:0);
+    const detComp=occList.flatMap(o=>(allComps[o]||[]).map(it=>(r.comp&&r.comp[o]&&r.comp[o].includes(it))?'DA':'NU'));
+    return [...base,...posturi,...formare,...nrComp,...detComp].map(esc).join(SEP);
+  });
+
+  const csv='\ufeff'+[header,...rows].join('\r\n');
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));
+  a.download='chestionar_ITI_VJ_'+new Date().toLocaleDateString('ro-RO').replace(/\//g,'-')+'.csv';
+  a.click();
+}
+async function doCl(){
+  if(!confirm('Stergeti DEFINITIV toate raspunsurile? Actiunea nu poate fi anulata.'))return;
+  await delR();ldst();
+}
+</script>
+</body>
+</html>
